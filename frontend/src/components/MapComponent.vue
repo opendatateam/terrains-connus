@@ -1,54 +1,77 @@
 <template>
   <div id="map" style="width: 100%; height: 100vh;"></div>
   <div id="sidebar" class="floating-sidebar">
-    <!-- Sidebar content goes here -->
   </div>
 </template>
 
 <script lang="ts">
 import maplibregl, { type Map as MapLibreMap } from "maplibre-gl";
 import { type Ref, defineComponent, onMounted, ref } from "vue";
+import styleVector from "@/assets/json/vector.json";
+import testData from "@/assets/json/test.json";
+import * as d3 from "d3-scale";
 
 export default defineComponent({
 	name: "MapComponent",
 	setup() {
 		const map: Ref<MapLibreMap | null> = ref(null);
 
+		const calculateColor = (value: number) => {
+			const scaleMin = 0;
+			const scaleMax = 1000;
+			const pivot = 500;
+
+			const scale = d3
+				.scaleLinear<string>()
+				.domain([scaleMin, pivot, scaleMax])
+				.range(["#F8FAFC", "#475569", "#020617"]);
+
+			return scale(value);
+		};
+
+		const updateMap = () => {
+			if (!map.value) return;
+
+			let resultArray = [];
+			resultArray.push("match")
+			resultArray.push(["get", "code"])
+			Object.entries(testData["Prés"]).forEach(([key, value]) => {
+				resultArray.push(key, calculateColor(Number(value)));
+			});
+			resultArray.push("#CCCCCC")
+			console.log("okok")
+			map.value.setPaintProperty(
+				"departements_fill",
+				"fill-color",
+				resultArray
+			);              
+		}
+
 		onMounted(() => {
 			const mapInstance: MapLibreMap = new maplibregl.Map({
 				container: "map",
-				style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+				style: styleVector,
 				center: [2.213749, 46.227638], // Center of France
 				zoom: 5.2,
 				minZoom: 2,
 				maxZoom: 18,
 			});
 
+			console.log("oefekok")
 			mapInstance.on("load", () => {
-				mapInstance.addSource("france-boundary", {
-					type: "geojson",
-					data: "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/metropole.geojson",
-				});
 
 				mapInstance.addLayer({
-					id: "france-fill",
+					id: "departements_fill",
 					type: "fill",
-					source: "france-boundary",
+					source: "decoupage-administratif",
+					"source-layer": "departements",
 					paint: {
-						"fill-color": "#627BC1",
-						"fill-opacity": 0.1,
+						"fill-opacity": 0.5,
 					},
 				});
+				console.log("okokefcece")
+				updateMap();
 
-				mapInstance.addLayer({
-					id: "france-outline",
-					type: "line",
-					source: "france-boundary",
-					paint: {
-						"line-color": "#627BC1",
-						"line-width": 2,
-					},
-				});
 			});
 
 			map.value = mapInstance;
