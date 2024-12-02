@@ -1,4 +1,4 @@
-export const FrenchDepartment = {
+export const FrenchDepartement = {
 	"01": "Ain",
 	"02": "Aisne",
 	"03": "Allier",
@@ -102,4 +102,4 @@ export const FrenchDepartment = {
 	"976": "Mayotte",
 } as const;
 
-export type DepartmentCode = keyof typeof FrenchDepartment;
+export type DepartementCode = keyof typeof FrenchDepartement;

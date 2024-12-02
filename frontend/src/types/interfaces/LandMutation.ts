@@ -1,8 +1,8 @@
-import type { FrenchDepartment } from "../enums/FrenchDepartment";
+import type { DepartementCode } from "../enums/FrenchDepartement";
 import type { NatureCulture } from "../enums/NatureCulture";
 
 export interface AggregatedLandMutation {
-	departementCode: FrenchDepartment;
+    departementCode: DepartementCode;
 	month: Date;
 	natureCulture: NatureCulture;
 	nbMutations: number;
