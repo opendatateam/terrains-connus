@@ -3,8 +3,8 @@
     <h2>Filters</h2>
     <div v-if="loading" class="loading">Chargement...</div>
     <div v-else>
-      <label for="natureCultureSelect">Nature de la culture</label>
       <select id="natureCultureSelect" v-model="selectedNatureCulture">
+        <option disabled value="">{{ "Choisir une nature de la culture" }}</option>
         <option v-for="(value, key) in natureCultureOptions" :key="key" :value="key">
           {{ value }}
         </option>
@@ -22,7 +22,7 @@ export default defineComponent({
 	data() {
 		return {
 			loading: true,
-			selectedNatureCulture: null,
+			selectedNatureCulture: "",
 			natureCultureOptions: NatureCulture,
 		};
 	},
@@ -43,8 +43,8 @@ export default defineComponent({
 <style>
 .sidebar {
   position: fixed;
-  top: 80px; /* Give some space below header */
-  left: 20px; /* Space from left edge */
+  top: 100px;
+  left: 20px;
   width: 250px;
   background-color: white;
   padding: 20px;

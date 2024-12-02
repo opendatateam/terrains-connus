@@ -1,94 +1,183 @@
 <template>
   <header class="app-header">
     <div class="header-content">
-      <div class="header-top">
-        <h1>Terrains connus</h1>
-        <p class="tagline">Obtenez une vue d'ensemble des terres vendues, classées par typologie, et accédez rapidement aux détails spécifiques de chaque transaction, incluant son prix et sa classification</p>
+      <!-- Logo -->
+      <div class="logo-container">
+        <img src="@/assets/logo.svg" alt="Terrains Connus Logo" class="logo" />
       </div>
-      <nav class="navigation">
-        <router-link to="/" :class="{ active: isMapRoute }" class="nav-link">Carte</router-link>
-        <router-link to="/tableau" class="nav-link">Tableau</router-link>
-        <router-link to="/questions" class="nav-link">Questions</router-link>
-      </nav>
+      <!-- Navigation et recherche -->
+      <div class="nav-search">
+        <nav class="navigation">
+          <!-- Onglet Carte -->
+          <router-link
+            to="/"
+            :class="{ active: isMapRoute }"
+            class="nav-link"
+          >
+            <img
+              :src="isMapRoute ? mapBlackIcon : mapGreyIcon"
+              alt="Carte Icon"
+              class="nav-icon"
+            />
+            Carte
+          </router-link>
+          <!-- Onglet Tableau -->
+          <router-link
+            to="/tableau"
+            :class="{ active: isTableRoute }"
+            class="nav-link"
+          >
+            <img
+              :src="isTableRoute ? tableBlackIcon : tableGreyIcon"
+              alt="Tableau Icon"
+              class="nav-icon"
+            />
+            Tableau
+          </router-link>
+          <!-- Onglet Questions -->
+          <router-link
+            to="/questions"
+            :class="{ active: isQuestionsRoute }"
+            class="nav-link"
+          >
+            <img
+              :src="isQuestionsRoute ? lightBlackIcon : lightGreyIcon"
+              alt="Questions Icon"
+              class="nav-icon"
+            />
+            Questions
+          </router-link>
+        </nav>
+        <!-- Barre de recherche -->
+        <input
+          type="text"
+          placeholder="Rechercher une adresse ou une parcelle"
+          class="search-input"
+        />
+      </div>
     </div>
   </header>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
 import { useRoute } from "vue-router";
 
-export default defineComponent({
-	setup() {
-		const route = useRoute();
-		const isMapRoute = computed(() => {
-			return route.path === "/" || route.path === "/map";
-		});
+/* Importation des icônes */
+import mapBlackIcon from "@/assets/mapblack.svg";
+import mapGreyIcon from "@/assets/mapgrey.svg";
+import tableBlackIcon from "@/assets/tableblack.svg";
+import tableGreyIcon from "@/assets/tablegrey.svg";
+import lightBlackIcon from "@/assets/lightblack.svg";
+import lightGreyIcon from "@/assets/lightgrey.svg";
 
-		return {
-			isMapRoute,
-		};
-	},
+export default defineComponent({
+  setup() {
+    const route = useRoute();
+
+    const isMapRoute = computed(() => route.path === "/" || route.path === "/map");
+    const isTableRoute = computed(() => route.path === "/tableau");
+    const isQuestionsRoute = computed(() => route.path === "/questions");
+
+    return {
+      isMapRoute,
+      isTableRoute,
+      isQuestionsRoute,
+      mapBlackIcon,
+      mapGreyIcon,
+      tableBlackIcon,
+      tableGreyIcon,
+      lightBlackIcon,
+      lightGreyIcon,
+    };
+  },
 });
 </script>
 
 <style>
+/* Styles de l'entête */
 .app-header {
   width: 100%;
   background-color: white;
   color: #333;
-  padding: 20px;
+  padding: 10px 20px;
   position: fixed;
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+/* Contenu principal : alignement horizontal */
 .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  text-align: left;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.header-top {
-  margin-bottom: 20px;
+/* Conteneur du logo */
+.logo-container {
+  display: flex;
+  align-items: center;
 }
 
-h1 {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 500;
+.logo {
+  width: 200px;
+  height: auto;
 }
 
-.tagline {
-  margin: 8px 0 0 0;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  color: #666;
+/* Navigation et recherche */
+.nav-search {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
+/* Navigation */
 .navigation {
-  border-bottom: 1px solid #eee;
+  display: flex;
+  gap: 15px;
 }
 
 .nav-link {
-  display: inline-block;
-  padding: 10px 20px;
-  color: #666;
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  margin-right: 10px;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: color 0.2s, background-color 0.2s;
 }
 
 .nav-link:hover {
   color: #333;
+  background-color: #f5f5f5;
 }
 
-.router-link-active {
+.nav-link.active {
   color: #333;
-  border-bottom: 2px solid #627BC1;
-  margin-bottom: -1px;
+  font-weight: bold;
 }
-</style> 
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+/* Barre de recherche */
+.search-input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  width: 300px;
+}
+
+.search-input::placeholder {
+  color: #aaa;
+}
+</style>
