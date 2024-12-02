@@ -20,18 +20,18 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: 'latest'
+          bun-version: latest
 
-      - name: Install frontend dependencies
+      - name: Install Dependencies
         working-directory: ./frontend
-        run: npm ci
+        run: bun install
 
-      - name: Build frontend
+      - name: Build
         working-directory: ./frontend
-        run: npm run build
+        run: bun run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
