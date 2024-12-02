@@ -2,53 +2,35 @@
   <aside class="sidebar">
     <h2>Filters</h2>
     <div v-if="loading" class="loading">Chargement...</div>
-    <div class="filter-section">
-      <h3>Types de terrain</h3>
-      <div v-for="type in landTypes" :key="type">
-        <label>
-          <input 
-            type="checkbox" 
-            :value="type"
-            v-model="selectedTypes"
-            @change="applyFilters"
-          />
-          {{ type }}
-        </label>
-      </div>
-
-      <div class="filter-section">
-        <h3>Département</h3>
-        <select 
-          v-model="selectedDepartment" 
-          class="filter-select"
-          @change="applyFilters"
-        >
-          <option value="">Tous les départements</option>
-          <option v-for="dept in departments" :key="dept.code" :value="dept.code">
-            {{ dept.code }} - {{ dept.name }}
-          </option>
-        </select>
-      </div>
+    <div v-else>
+      <label for="natureCultureSelect">Nature Culture:</label>
+      <select id="natureCultureSelect" v-model="selectedNatureCulture">
+        <option v-for="(value, key) in natureCultureOptions" :key="key" :value="key">
+          {{ value }}
+        </option>
+      </select>
     </div>
   </aside>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { NatureCulture } from "../types";
 
 export default defineComponent({
 	name: "SidebarComponent",
 	data() {
 		return {
-			filter1: false,
-			filter2: false,
 			loading: true,
-			landTypes: [] as string[],
-			selectedTypes: [] as string[],
-			selectedDepartment: "",
-			departments: [] as Array<{ code: string; name: string }>,
-			cultureTypes: [] as string[],
+			selectedNatureCulture: null,
+			natureCultureOptions: NatureCulture,
 		};
+	},
+	mounted() {
+		// Simulate loading
+		setTimeout(() => {
+			this.loading = false;
+		}, 1000);
 	},
 	methods: {
 		applyFilters(): void {
@@ -82,20 +64,11 @@ export default defineComponent({
   color: #909090;
 }
 
-.filter-section {
-  margin-bottom: 20px;
-}
-
-.filter-section h3 {
-  font-size: 1.1em;
-  margin-bottom: 10px;
-}
-
-.filter-select {
+select {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
+  padding: 5px;
+  margin-top: 10px;
   border-radius: 5px;
-  margin-bottom: 10px;
+  border: 1px solid #ccc;
 }
 </style> 

@@ -1,21 +1,18 @@
 <template>
   <HeaderComponent />
-  <SidebarComponent />
-  <MapComponent />
+  <MainComponent />
 </template>
 
 <script lang="ts">
 import { type DefineComponent, defineComponent } from "vue";
 import HeaderComponent from "./components/HeaderComponent.vue";
-import MapComponent from "./components/MapComponent.vue";
-import SidebarComponent from "./components/SidebarComponent.vue";
+import MainComponent from "./components/MainComponent.vue";
 
 export default defineComponent({
 	name: "App",
 	components: {
 		HeaderComponent,
-		SidebarComponent,
-		MapComponent,
+		MainComponent,
 	},
 }) as DefineComponent;
 </script>

@@ -1,8 +1,15 @@
 <template>
   <header class="app-header">
     <div class="header-content">
-      <h1>Terrains connus</h1>
-      <p class="tagline">Obtenez une vue d'ensemble des terres vendues, classées par typologie, et accédez rapidement aux détails spécifiques de chaque transaction, incluant son prix et sa classification</p>
+      <div class="header-top">
+        <h1>Terrains connus</h1>
+        <p class="tagline">Obtenez une vue d'ensemble des terres vendues, classées par typologie, et accédez rapidement aux détails spécifiques de chaque transaction, incluant son prix et sa classification</p>
+      </div>
+      <nav class="navigation">
+        <router-link to="/map" class="nav-link">Carte</router-link>
+        <router-link to="/datasheet" class="nav-link">Données</router-link>
+        <router-link to="/questions" class="nav-link">Questions</router-link>
+      </nav>
     </div>
   </header>
 </template>
@@ -33,6 +40,10 @@ export default defineComponent({
   margin: 0 auto;
 }
 
+.header-top {
+  margin-bottom: 20px;
+}
+
 h1 {
   margin: 0;
   font-size: 1.5rem;
@@ -44,5 +55,27 @@ h1 {
   font-size: 0.9rem;
   line-height: 1.4;
   color: #666;
+}
+
+.navigation {
+  border-bottom: 1px solid #eee;
+}
+
+.nav-link {
+  display: inline-block;
+  padding: 10px 20px;
+  color: #666;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.nav-link:hover {
+  color: #333;
+}
+
+.router-link-active {
+  color: #333;
+  border-bottom: 2px solid #627BC1;
+  margin-bottom: -1px;
 }
 </style> 
