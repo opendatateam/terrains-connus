@@ -13,22 +13,20 @@ export enum NatureCulture {
 	VI = "Vignes",
 }
 
-export namespace NatureCulture {
-	export function fromCsv(csvLandUse: string): NatureCulture {
-		const mapping: { [key: string]: NatureCulture } = {
-			landes: NatureCulture.L,
-			prés: NatureCulture.P,
-			pâtures: NatureCulture.PA,
-			pacages: NatureCulture.PC,
-			"prés d'embouche": NatureCulture.PE,
-			herbages: NatureCulture.PH,
-			"prés plantes": NatureCulture.PP,
-			sols: NatureCulture.S,
-			terres: NatureCulture.T,
-			"terres plantées": NatureCulture.TP,
-			vergers: NatureCulture.VE,
-			vignes: NatureCulture.VI,
-		};
-		return mapping[csvLandUse.toLowerCase()] || NatureCulture.T;
-	}
+export function fromCsv(csvLandUse: string): NatureCulture {
+	const mapping: { [key: string]: NatureCulture } = {
+		landes: NatureCulture.L,
+		prés: NatureCulture.P,
+		pâtures: NatureCulture.PA,
+		pacages: NatureCulture.PC,
+		"prés d'embouche": NatureCulture.PE,
+		herbages: NatureCulture.PH,
+		"prés plantes": NatureCulture.PP,
+		sols: NatureCulture.S,
+		terres: NatureCulture.T,
+		"terres plantées": NatureCulture.TP,
+		vergers: NatureCulture.VE,
+		vignes: NatureCulture.VI,
+	};
+	return mapping[csvLandUse.toLowerCase()] || NatureCulture.T;
 }
