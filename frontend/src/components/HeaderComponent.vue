@@ -53,17 +53,27 @@
         <!-- Barre de recherche -->
         <input
           type="text"
-          placeholder="Rechercher une adresse ou une parcelle"
+          placeholder="Rechercher une adresse ou une commune"
           class="search-input"
+          v-model="searchAdress"
+          v-on:keyup.enter="autoComplete()"
+          @input="autoComplete()"
         />
+        <div class="addressPropositions" v-if="resultsAdresses">
+          <span v-if="resultsAdresses">
+            <span v-bind:key="item.properties.banId" v-for="item in resultsAdresses.features">
+              <div class="addressProposition" @click="goToAddress(item.geometry.coordinates)">{{  item.properties.label }}</div>
+            </span>
+          </span></div>
       </div>
     </div>
   </header>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, ref } from "vue";
 import { useRoute } from "vue-router";
+import { useAppStore } from '@/store/appStore.ts';
 
 /* Importation des icônes */
 import mapBlackIcon from "@/assets/mapblack.svg";
@@ -73,13 +83,65 @@ import tableGreyIcon from "@/assets/tablegrey.svg";
 import lightBlackIcon from "@/assets/lightblack.svg";
 import lightGreyIcon from "@/assets/lightgrey.svg";
 
+interface AddressFeature {
+  banId: string;
+  label: string;
+}
+
+interface Geometry{
+  coordinates: Array<number>
+}
+
+interface Feature{
+  properties: AddressFeature
+  geometry: Geometry
+}
+
+interface ResultsAdresses {
+  features: Feature[];
+}
+
 export default defineComponent({
   setup() {
     const route = useRoute();
+    const appStore = useAppStore();
 
     const isMapRoute = computed(() => route.path === "/" || route.path === "/map");
     const isTableRoute = computed(() => route.path === "/tableau");
     const isQuestionsRoute = computed(() => route.path === "/questions");
+    const searchAdress = ref("")
+    const resultsAdresses = ref<ResultsAdresses | null>(null)
+
+    const autoComplete = () => {
+      if (searchAdress.value.length === 0) {
+        resultsAdresses.value = null;
+      }
+      let search = searchAdress.value;
+      let timer = setTimeout(() => {
+        if (searchAdress.value === search) {
+          getAdresses();
+        }
+      }, 650);
+    }
+
+
+    const getAdresses = () => {
+      fetch(
+        "https://api-adresse.data.gouv.fr/search/?q=" +
+        searchAdress.value.replace(" ", "%20")
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          resultsAdresses.value = data;
+        });
+    }
+
+    const goToAddress = (coordinates: Array<number>) => {
+      appStore.updateAddress(coordinates)
+      resultsAdresses.value = null;
+    }
 
     return {
       isMapRoute,
@@ -91,6 +153,10 @@ export default defineComponent({
       tableGreyIcon,
       lightBlackIcon,
       lightGreyIcon,
+      searchAdress,
+      autoComplete,
+      resultsAdresses,
+      goToAddress,
     };
   },
 });
@@ -189,4 +255,30 @@ export default defineComponent({
 .search-input::placeholder {
   color: #aaa;
 }
+
+.addressPropositions {
+  position: absolute;
+  top: 100%;
+  right: 30px;
+  width: 300px;
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.addressProposition{
+  height: 30px;
+  line-height: 30px;
+  cursor: pointer;
+}
+
+.addressProposition:hover{
+  background-color: #ebebeb;
+}
+
 </style>

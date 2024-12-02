@@ -1,21 +1,46 @@
 <template>
-  <div id="map" style="width: 100%; height: 100vh;"></div>
-  <div id="sidebar" class="floating-sidebar">
-  </div>
+	<div>
+		<div
+			ref="mapTooltip"
+			class="map_tooltip"
+			v-show="tooltip.visibility == 'visible'"
+			:style="{ top: tooltip.top, left: tooltip.left }"
+		>
+		<div class="tooltip_body">
+			<b>{{ depName }}</b>
+			<br />
+			{{ tooltip.value }} transactions
+		</div>
+		</div>
+		<div id="map" style="width: 100%; height: 100vh;"></div>
+		<div id="sidebar" class="floating-sidebar"></div>
+	</div>
 </template>
 
 <script lang="ts">
 import maplibregl, { type Map as MapLibreMap } from "maplibre-gl";
-import type { StyleSpecification } from "maplibre-gl";
-import { type Ref, defineComponent, onMounted, ref } from "vue";
+import type { LngLatBoundsLike, LngLatLike, StyleSpecification } from "maplibre-gl";
+import { type Ref, defineComponent, onMounted, ref, watch } from "vue";
 import styleVector from "@/assets/json/vector.json";
 import testData from "@/assets/json/test.json";
 import * as d3 from "d3-scale";
+import { useAppStore } from '@/store/appStore.ts';
 
 export default defineComponent({
 	name: "MapComponent",
 	setup() {
+		const appStore = useAppStore();
 		const map: Ref<MapLibreMap | null> = ref(null);
+		let displayDepLayer = true
+		const depName = ref(null)
+
+		const tooltip = ref({
+			top: "0px",
+			left: "0px",
+			display: "block",
+			visibility: "",
+			value: 0,
+		})
 
 		const calculateColor = (value: number) => {
 			const scaleMin = 0;
@@ -30,17 +55,16 @@ export default defineComponent({
 			return scale(value);
 		};
 
-		const updateMap = () => {
+		const updateMap = (value: string) => {
 			if (!map.value) return;
 
 			let resultArray = [];
 			resultArray.push("match")
 			resultArray.push(["get", "code"])
-			Object.entries(testData["Prés"]).forEach(([key, value]) => {
+			Object.entries(testData[value as keyof typeof testData]).forEach(([key, value]) => {
 				resultArray.push(key, calculateColor(Number(value)));
 			});
 			resultArray.push("#CCCCCC")
-			console.log("okok")
 			map.value.setPaintProperty(
 				"departements_fill",
 				"fill-color",
@@ -48,17 +72,23 @@ export default defineComponent({
 			);              
 		}
 
+		const displayTooltip = (e: any) => {
+			let tooltipX = e.point.x;
+			let tooltipY = e.point.y;
+			tooltip.value.top = tooltipY + "px";
+			tooltip.value.left = tooltipX + "px";
+		}
+
 		onMounted(() => {
 			const mapInstance: MapLibreMap = new maplibregl.Map({
 				container: "map",
 				style: styleVector as StyleSpecification,
 				center: [2.213749, 46.227638], // Center of France
-				zoom: 5.2,
+				zoom: appStore.mapZoom,
 				minZoom: 2,
 				maxZoom: 18,
 			});
 
-			console.log("oefekok")
 			mapInstance.on("load", () => {
 
 				mapInstance.addLayer({
@@ -70,20 +100,83 @@ export default defineComponent({
 						"fill-opacity": 0.5,
 					},
 				});
-				console.log("okokefcece")
-				updateMap();
 
+
+				mapInstance.addLayer({
+					id: "parcelles_fill",
+					type: "fill",
+					source: "cadastre",
+					filter: ["has", "dvf"],
+					"source-layer": "parcelles",
+					minzoom: 13,
+            		maxzoom: 18,
+					paint: {
+					"fill-color": "rgba(0, 0, 255, 0.2)",
+					},
+				});
+
+
+				mapInstance.on("mousemove", "departements_fill", (e: any) => {
+					depName.value = e.features[0]["properties"]["nom"];
+					let depCode = e.features[0]["properties"]["code"];
+					tooltip.value.value = (testData[appStore.option as keyof typeof testData] as unknown as Record<string, number>)[depCode];	
+					tooltip.value.visibility = "visible"		
+					displayTooltip(e)
+				});
+				
+				updateMap("P");
+			});
+
+			mapInstance.on("zoom", (m) => {
+				appStore.updateMapZoom(mapInstance.getZoom());
 			});
 
 			map.value = mapInstance;
 		});
 
-		return { map };
+		watch(() => appStore.option, (newValue: string) => {
+			updateMap(newValue);
+		});
+
+		watch(() => appStore.address, (newValue: Array<number>) => {
+			if(!map.value) return;
+			map.value.flyTo({
+				center: newValue as LngLatLike,
+				zoom: 16,
+			});
+		});
+
+		watch(() => appStore.mapZoom, (newValue: number) => {
+			if (!map.value) return;
+			if (displayDepLayer && newValue > 13) {
+				displayDepLayer = false;
+				tooltip.value.visibility = ""
+				map.value.setLayoutProperty(
+					"departements_fill",
+					"visibility",
+					"none"
+				);
+			}
+			if (!displayDepLayer && newValue <= 13) {
+				displayDepLayer = true;
+				tooltip.value.visibility = "visible"
+				map.value.setLayoutProperty(
+					"departements_fill",
+					"visibility",
+					"visible"
+				);
+			}
+		});
+
+
+		return { map, tooltip, depName };
 	},
+
+	
 });
 </script>
 
-<style>
+<style scoped>
 #map {
   position: absolute;
   top: 0;
@@ -105,4 +198,28 @@ export default defineComponent({
   padding: 15px;
   z-index: 1;
 }
+
+.map_tooltip {
+  width: auto;
+  min-width: 165px;
+  height: auto;
+  background-color: white;
+  position: absolute;
+  z-index: 999;
+  border-radius: 4px;
+  box-shadow: 0 8px 16px 0 rgba(22, 22, 22, 0.12),
+    0 8px 16px -16px rgba(22, 22, 22, 0.32);
+  text-align: left;
+  pointer-events: none;
+  font-size: 0.75rem;
+}
+
+.tooltip_body {
+    padding-left: 0.75rem;
+    padding-top: 0.25rem;
+    padding-right: 0.75rem;
+    line-height: 1.67;
+}
+
+
 </style> 

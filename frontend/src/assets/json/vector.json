@@ -30,6 +30,10 @@
       "decoupage-administratif": {
         "type": "vector",
         "url": "https://openmaptiles.geo.data.gouv.fr/data/decoupage-administratif.json"
+      },
+      "cadastre": {
+          "type": "vector",
+          "url": " https://openmaptiles.geo.data.gouv.fr/data/cadastre-dvf.json"
       }
     },
     "sprite": "https://openmaptiles.github.io/osm-bright-gl-style/sprite",

@@ -23,7 +23,7 @@ export default defineComponent({
   props: {
     selectedNatureCulture: {
       type: String,
-      default: "",
+      default: "P",
     },
   },
   data() {

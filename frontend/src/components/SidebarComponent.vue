@@ -4,14 +4,18 @@
     <div v-else>
       <TileOne :selectedNatureCulture="selectedNatureCulture" @update:selectedNatureCulture="updateSelectedNatureCulture" />
       <TileTwo :selectedNatureCulture="selectedNatureCulture" />
+      zoom for debug : {{ toto }}
+      <br />
+      addressGPS : {{  tutu  }}
     </div>
   </aside>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, onMounted, watch } from "vue";
 import TileOne from "./sidebar/TileOne.vue";
 import TileTwo from "./sidebar/TileTwo.vue";
+import { useAppStore } from '@/store/appStore.ts';
 
 export default defineComponent({
   name: "SidebarComponent",
@@ -19,22 +23,42 @@ export default defineComponent({
     TileOne,
     TileTwo,
   },
-  data() {
-    return {
-      loading: true,
-      selectedNatureCulture: "", // Centralized state
+  setup() {
+    const appStore = useAppStore();
+
+    const loading = ref(true);
+    const selectedNatureCulture = ref("P");
+
+    const updateSelectedNatureCulture = (value: string) => {
+      selectedNatureCulture.value = value;
+      appStore.updateOption(value);
     };
-  },
-  methods: {
-    updateSelectedNatureCulture(value: string) {
-      this.selectedNatureCulture = value;
-    },
-  },
-  mounted() {
-    // Simulate loading
-    setTimeout(() => {
-      this.loading = false;
-    }, 1000);
+
+    onMounted(() => {
+      setTimeout(() => {
+        loading.value = false;
+      }, 1000);
+    });
+
+    const toto = ref(1)
+    const tutu = ref([1,1])
+
+		watch(() => appStore.mapZoom, (newValue: number) => {
+			toto.value = newValue;
+		});
+
+		watch(() => appStore.address, (newValue: Array<number>) => {
+			tutu.value = newValue;
+		});
+
+    return {
+      loading,
+      selectedNatureCulture,
+      updateSelectedNatureCulture,
+      appStore,
+      toto,
+      tutu,
+    };
   },
 });
 </script>
