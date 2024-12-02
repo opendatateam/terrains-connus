@@ -1,42 +1,41 @@
 <template>
   <aside class="sidebar">
-    <h2>Filters</h2>
     <div v-if="loading" class="loading">Chargement...</div>
     <div v-else>
-      <select id="natureCultureSelect" v-model="selectedNatureCulture">
-        <option disabled value="">{{ "Choisir une nature de la culture" }}</option>
-        <option v-for="(value, key) in natureCultureOptions" :key="key" :value="key">
-          {{ value }}
-        </option>
-      </select>
+      <TileOne :selectedNatureCulture="selectedNatureCulture" @update:selectedNatureCulture="updateSelectedNatureCulture" />
+      <TileTwo :selectedNatureCulture="selectedNatureCulture" />
     </div>
   </aside>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { NatureCulture } from "../types";
+import TileOne from "./sidebar/TileOne.vue";
+import TileTwo from "./sidebar/TileTwo.vue";
 
 export default defineComponent({
-	name: "SidebarComponent",
-	data() {
-		return {
-			loading: true,
-			selectedNatureCulture: "",
-			natureCultureOptions: NatureCulture,
-		};
-	},
-	mounted() {
-		// Simulate loading
-		setTimeout(() => {
-			this.loading = false;
-		}, 1000);
-	},
-	methods: {
-		applyFilters(): void {
-			// Handle filters application logic here
-		},
-	},
+  name: "SidebarComponent",
+  components: {
+    TileOne,
+    TileTwo,
+  },
+  data() {
+    return {
+      loading: true,
+      selectedNatureCulture: "", // Centralized state
+    };
+  },
+  methods: {
+    updateSelectedNatureCulture(value: string) {
+      this.selectedNatureCulture = value;
+    },
+  },
+  mounted() {
+    // Simulate loading
+    setTimeout(() => {
+      this.loading = false;
+    }, 1000);
+  },
 });
 </script>
 
@@ -50,7 +49,7 @@ export default defineComponent({
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  z-index: 10;
 }
 
 .sidebar h2 {
@@ -64,11 +63,23 @@ export default defineComponent({
   color: #909090;
 }
 
-select {
-  width: 100%;
-  padding: 5px;
-  margin-top: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+.tile {
+  position: relative;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  z-index: 1;
 }
-</style> 
+
+.tile:last-child {
+  margin-bottom: 0;
+}
+
+.tile select {
+  position: relative;
+  z-index: 2;
+}
+</style>

@@ -1,5 +1,5 @@
-import type { DepartementCode } from "../enums/FrenchDepartement";
-import type { NatureCulture } from "../enums/NatureCulture";
+import type { DepartementCode } from "./FrenchDepartement";
+import type { NatureCulture } from "./NatureCulture";
 
 export interface AggregatedLandMutation {
 	departementCode: DepartementCode;

@@ -3,7 +3,9 @@
     <div class="header-content">
       <!-- Logo -->
       <div class="logo-container">
-        <img src="@/assets/logo.svg" alt="Terrains Connus Logo" class="logo" />
+        <router-link to="/" class="logo-link">
+          <img src="@/assets/logo.svg" alt="Terrains Connus Logo" class="logo" />
+        </router-link>
       </div>
       <!-- Navigation et recherche -->
       <div class="nav-search">
@@ -112,8 +114,9 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Conteneur du logo */
@@ -122,9 +125,14 @@ export default defineComponent({
   align-items: center;
 }
 
+.logo-link {
+  display: inline-flex;
+}
+
 .logo {
   width: 200px;
   height: auto;
+  cursor: pointer; /* Indique que le logo est cliquable */
 }
 
 /* Navigation et recherche */
@@ -144,12 +152,13 @@ export default defineComponent({
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: #666;
+  color: #64748B;
   font-size: 0.9rem;
   font-weight: 500;
   padding: 8px 12px;
   border-radius: 4px;
   transition: color 0.2s, background-color 0.2s;
+  font-family: 'Geist', sans-serif;
 }
 
 .nav-link:hover {
