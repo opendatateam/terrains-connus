@@ -3,7 +3,7 @@
     <h2>Filters</h2>
     <div v-if="loading" class="loading">Chargement...</div>
     <div v-else>
-      <label for="natureCultureSelect">Nature Culture:</label>
+      <label for="natureCultureSelect">Nature de la culture</label>
       <select id="natureCultureSelect" v-model="selectedNatureCulture">
         <option v-for="(value, key) in natureCultureOptions" :key="key" :value="key">
           {{ value }}
