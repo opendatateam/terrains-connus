@@ -21,7 +21,7 @@ function mapNatureCulture(csvLandUse: string): NatureCulture {
 }
 
 export const api = {
-	async getLandTransactions(): Promise<AggregatedLandMutation[]> {
+	async getAggregatedLandMutations(): Promise<AggregatedLandMutation[]> {
 		try {
 			const response = await fetch("../../../data/stats.csv");
 			const csvText = await response.text();
@@ -30,16 +30,15 @@ export const api = {
 			const headers = lines[0].split(",");
 
 			return lines
-				.slice(1) // Skip header row
-				.filter((line) => line.trim()) // Remove empty lines
+				.slice(1)
+				.filter((line) => line.trim())
 				.map((line) => {
 					const values = line.split(",");
 					return {
-						departementCode: values[0],
-						month: new Date(`${values[1]}-01`), // Add day to make valid date
+						departementCode: values[0].padStart(2, "0"),
+						month: new Date(`${values[1]}-01`),
 						natureCulture: mapNatureCulture(values[2]),
 						nbMutations: Number.parseInt(values[3], 10),
-						count: Number.parseInt(values[3], 10),
 					};
 				});
 		} catch (error) {
