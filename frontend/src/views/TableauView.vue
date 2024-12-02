@@ -1,15 +1,15 @@
 <template>
-  <DatasheetComponent />
+  <TableauComponent />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import DatasheetComponent from '../components/DatasheetComponent.vue'
+import TableauComponent from '../components/TableauComponent.vue'
 
 export default defineComponent({
-  name: 'DatasheetView',
+  name: 'TableauView',
   components: {
-    DatasheetComponent
+    TableauComponent
   }
 })
 </script> 

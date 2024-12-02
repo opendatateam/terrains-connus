@@ -7,7 +7,7 @@
       </div>
       <nav class="navigation">
         <router-link to="/map" class="nav-link">Carte</router-link>
-        <router-link to="/datasheet" class="nav-link">Données</router-link>
+        <router-link to="/tableau" class="nav-link">Tableau</router-link>
         <router-link to="/questions" class="nav-link">Questions</router-link>
       </nav>
     </div>
@@ -35,6 +35,9 @@ export default defineComponent({
 }
 
 .header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   text-align: left;
   max-width: 1200px;
   margin: 0 auto;

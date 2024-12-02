@@ -1,7 +1,7 @@
 <template>
-  <div class="datasheet">
-    <h2>Datasheet Component</h2>
-    <!-- Add your datasheet content here -->
+  <div class="tableau">
+    <h2>Tableau Component</h2>
+    <!-- Add your tableau content here -->
   </div>
 </template>
 
@@ -9,12 +9,12 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "DatasheetComponent",
+  name: "TableauComponent",
 });
 </script>
 
 <style>
-.datasheet {
+.tableau {
   padding: 20px;
 }
 </style> 
