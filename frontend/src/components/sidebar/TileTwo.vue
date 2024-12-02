@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { NatureCulture } from "@/types/enums/NatureCulture";
+import { NatureCulture } from "@/types/NatureCulture";
 
 export default defineComponent({
   name: "TileTwo",
