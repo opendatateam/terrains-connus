@@ -4,15 +4,15 @@ import TableauView from '../views/TableauView.vue'
 import QuestionsView from '../views/QuestionsView.vue'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/terrains-connus/'),
   routes: [
     {
       path: '/',
-      redirect: '/map'
+      redirect: '/carte'
     },
     {
-      path: '/map',
-      name: 'map',
+      path: '/carte',
+      name: 'carte',
       component: MapView
     },
     {

@@ -6,7 +6,7 @@
         <p class="tagline">Obtenez une vue d'ensemble des terres vendues, classées par typologie, et accédez rapidement aux détails spécifiques de chaque transaction, incluant son prix et sa classification</p>
       </div>
       <nav class="navigation">
-        <router-link to="/map" class="nav-link">Carte</router-link>
+        <router-link to="/" :class="{ active: isMapRoute }" class="nav-link">Carte</router-link>
         <router-link to="/tableau" class="nav-link">Tableau</router-link>
         <router-link to="/questions" class="nav-link">Questions</router-link>
       </nav>
@@ -15,11 +15,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed } from 'vue'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
-	name: "HeaderComponent",
-});
+  setup() {
+    const route = useRoute()
+    const isMapRoute = computed(() => {
+      return route.path === '/' || route.path === '/map'
+    })
+
+    return {
+      isMapRoute
+    }
+  }
+})
 </script>
 
 <style>
