@@ -6,6 +6,7 @@
 
 <script lang="ts">
 import maplibregl, { type Map as MapLibreMap } from "maplibre-gl";
+import type { StyleSpecification } from "maplibre-gl";
 import { type Ref, defineComponent, onMounted, ref } from "vue";
 import styleVector from "@/assets/json/vector.json";
 import testData from "@/assets/json/test.json";
@@ -50,7 +51,7 @@ export default defineComponent({
 		onMounted(() => {
 			const mapInstance: MapLibreMap = new maplibregl.Map({
 				container: "map",
-				style: styleVector,
+				style: styleVector as StyleSpecification,
 				center: [2.213749, 46.227638], // Center of France
 				zoom: 5.2,
 				minZoom: 2,
