@@ -33,7 +33,7 @@
       },
       "cadastre": {
           "type": "vector",
-          "url": " https://openmaptiles.geo.data.gouv.fr/data/cadastre-dvf.json"
+          "url": "https://openmaptiles.geo.data.gouv.fr/data/cadastre-dvf.json"
       }
     },
     "sprite": "https://openmaptiles.github.io/osm-bright-gl-style/sprite",

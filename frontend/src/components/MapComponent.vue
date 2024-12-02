@@ -9,7 +9,9 @@
 		<div class="tooltip_body">
 			<b>{{ depName }}</b>
 			<br />
-			{{ tooltip.value }} transactions
+			<span v-if="tooltip.mode == 'parcelle'">parcelle numéro </span>
+			{{ tooltip.value }}
+			<span v-if="tooltip.mode == 'departement'"> transactions</span>
 		</div>
 		</div>
 		<div id="map" style="width: 100%; height: 100vh;"></div>
@@ -38,6 +40,7 @@ export default defineComponent({
 			top: "0px",
 			left: "0px",
 			display: "block",
+			mode: "departement",
 			visibility: "",
 			value: 0,
 		})
@@ -119,7 +122,17 @@ export default defineComponent({
 				mapInstance.on("mousemove", "departements_fill", (e: any) => {
 					depName.value = e.features[0]["properties"]["nom"];
 					let depCode = e.features[0]["properties"]["code"];
+					tooltip.value.mode = "departement"
 					tooltip.value.value = (testData[appStore.option as keyof typeof testData] as unknown as Record<string, number>)[depCode];	
+					tooltip.value.visibility = "visible"		
+					displayTooltip(e)
+				});
+
+
+				mapInstance.on("mousemove", "parcelles_fill", (e: any) => {
+					let parcelleCode = e.features[0]["properties"]["id"];
+					tooltip.value.mode = "parcelle"
+					tooltip.value.value = parcelleCode;
 					tooltip.value.visibility = "visible"		
 					displayTooltip(e)
 				});
