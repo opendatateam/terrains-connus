@@ -1,17 +1,34 @@
 <template>
   <aside class="sidebar">
     <h2>Filters</h2>
-    <div>
-      <label>
-        <input type="checkbox" v-model="filter1" />
-        Filter 1
-      </label>
-    </div>
-    <div>
-      <label>
-        <input type="checkbox" v-model="filter2" />
-        Filter 2
-      </label>
+    <div v-if="loading" class="loading">Chargement...</div>
+    <div class="filter-section">
+      <h3>Types de terrain</h3>
+      <div v-for="type in landTypes" :key="type">
+        <label>
+          <input 
+            type="checkbox" 
+            :value="type"
+            v-model="selectedTypes"
+            @change="applyFilters"
+          />
+          {{ type }}
+        </label>
+      </div>
+
+      <div class="filter-section">
+        <h3>Département</h3>
+        <select 
+          v-model="selectedDepartment" 
+          class="filter-select"
+          @change="applyFilters"
+        >
+          <option value="">Tous les départements</option>
+          <option v-for="dept in departments" :key="dept.code" :value="dept.code">
+            {{ dept.code }} - {{ dept.name }}
+          </option>
+        </select>
+      </div>
     </div>
   </aside>
 </template>
@@ -22,8 +39,18 @@ export default {
   data() {
     return {
       filter1: false,
-      filter2: false
+      filter2: false,
+      loading: true,
+      landTypes: [],
+      selectedTypes: [],
+      selectedDepartment: '',
+      departments: []
     };
+  },
+  methods: {
+    applyFilters() {
+      // Handle filters application logic here
+    }
   }
 };
 </script>
@@ -43,6 +70,29 @@ export default {
 
 .sidebar h2 {
   font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.loading {
+  text-align: center;
+  padding: 10px;
+  color: #909090;
+}
+
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.filter-section h3 {
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+.filter-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
   margin-bottom: 10px;
 }
 </style> 
