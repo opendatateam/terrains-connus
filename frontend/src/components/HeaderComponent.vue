@@ -15,21 +15,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, defineComponent } from "vue";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
-  setup() {
-    const route = useRoute()
-    const isMapRoute = computed(() => {
-      return route.path === '/' || route.path === '/map'
-    })
+	setup() {
+		const route = useRoute();
+		const isMapRoute = computed(() => {
+			return route.path === "/" || route.path === "/map";
+		});
 
-    return {
-      isMapRoute
-    }
-  }
-})
+		return {
+			isMapRoute,
+		};
+	},
+});
 </script>
 
 <style>

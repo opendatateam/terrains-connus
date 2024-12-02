@@ -9,7 +9,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "TableauComponent",
+	name: "TableauComponent",
 });
 </script>
 

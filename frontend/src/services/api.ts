@@ -1,5 +1,5 @@
-import type { AggregatedLandMutation } from "../types/models";
 import { fromCsv } from "../types";
+import type { AggregatedLandMutation } from "../types/models";
 
 export const api = {
 	async getAggregatedLandMutations(): Promise<AggregatedLandMutation[]> {

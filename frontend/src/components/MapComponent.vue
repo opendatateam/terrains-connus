@@ -6,17 +6,16 @@
 </template>
 
 <script lang="ts">
-import type { Map } from "maplibre-gl";
-import maplibregl from "maplibre-gl";
+import maplibregl, { type Map as MapLibreMap } from "maplibre-gl";
 import { type Ref, defineComponent, onMounted, ref } from "vue";
 
 export default defineComponent({
 	name: "MapComponent",
 	setup() {
-		const map: Ref<Map | null> = ref(null);
+		const map: Ref<MapLibreMap | null> = ref(null);
 
 		onMounted(() => {
-			const mapInstance = new maplibregl.Map({
+			const mapInstance: MapLibreMap = new maplibregl.Map({
 				container: "map",
 				style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
 				center: [2.213749, 46.227638], // Center of France
