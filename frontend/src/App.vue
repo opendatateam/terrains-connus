@@ -4,19 +4,20 @@
   <MapComponent />
 </template>
 
-<script>
-import HeaderComponent from './components/HeaderComponent.vue';
-import SidebarComponent from './components/SidebarComponent.vue';
-import MapComponent from './components/MapComponent.vue';
+<script lang="ts">
+import { type DefineComponent, defineComponent } from "vue";
+import HeaderComponent from "./components/HeaderComponent.vue";
+import MapComponent from "./components/MapComponent.vue";
+import SidebarComponent from "./components/SidebarComponent.vue";
 
-export default {
-  name: 'App',
-  components: {
-    HeaderComponent,
-    SidebarComponent,
-    MapComponent
-  }
-};
+export default defineComponent({
+	name: "App",
+	components: {
+		HeaderComponent,
+		SidebarComponent,
+		MapComponent,
+	},
+}) as DefineComponent;
 </script>
 
 <style>

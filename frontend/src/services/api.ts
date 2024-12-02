@@ -1,46 +1,52 @@
-import axios from 'axios';
+import type { AggregatedLandMutation } from "../types/models";
+import { NatureCulture } from "../types/models";
 
-// Define types for your data
-interface LandTransaction {
-  id: string;
-  price: number;
-  area: number;
-  type: string;
-  coordinates: [number, number];
-  // Add other properties as needed
+// Helper function to convert CSV land use to enum
+function mapNatureCulture(csvLandUse: string): NatureCulture {
+	const mapping: { [key: string]: NatureCulture } = {
+		landes: NatureCulture.L,
+		prés: NatureCulture.P,
+		pâtures: NatureCulture.PA,
+		pacages: NatureCulture.PC,
+		"prés d'embouche": NatureCulture.PE,
+		herbages: NatureCulture.PH,
+		"prés plantes": NatureCulture.PP,
+		sols: NatureCulture.S,
+		terres: NatureCulture.T,
+		"terres plantées": NatureCulture.TP,
+		vergers: NatureCulture.VE,
+		vignes: NatureCulture.VI,
+	};
+	return mapping[csvLandUse.toLowerCase()] || NatureCulture.T;
 }
-
-interface FilterParams {
-  type?: string[];
-  minPrice?: number;
-  maxPrice?: number;
-  minArea?: number;
-  maxArea?: number;
-  // Add other filter parameters as needed
-}
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
 
 export const api = {
-  async getLandTransactions(filters: FilterParams): Promise<LandTransaction[]> {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/transactions`, {
-        params: filters
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching land transactions:', error);
-      throw error;
-    }
-  },
+	async getLandTransactions(): Promise<AggregatedLandMutation[]> {
+		try {
+			const response = await fetch("../../../data/stats.csv");
+			const csvText = await response.text();
 
-  async getLandTypes(): Promise<string[]> {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/types`);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching land types:', error);
-      throw error;
-    }
-  }
-}; 
+			const lines = csvText.split("\n");
+			const headers = lines[0].split(",");
+
+			return lines
+				.slice(1) // Skip header row
+				.filter((line) => line.trim()) // Remove empty lines
+				.map((line) => {
+					const values = line.split(",");
+					return {
+						departementCode: values[0],
+						month: new Date(`${values[1]}-01`), // Add day to make valid date
+						natureCulture: mapNatureCulture(values[2]),
+						nbMutations: Number.parseInt(values[3], 10),
+						count: Number.parseInt(values[3], 10),
+					};
+				});
+		} catch (error) {
+			console.error("Error loading CSV data:", error);
+			throw error;
+		}
+	},
+};
+
+// Export the interface

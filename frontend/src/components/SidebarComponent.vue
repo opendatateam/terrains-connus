@@ -33,26 +33,29 @@
   </aside>
 </template>
 
-<script>
-export default {
-  name: 'SidebarComponent',
-  data() {
-    return {
-      filter1: false,
-      filter2: false,
-      loading: true,
-      landTypes: [],
-      selectedTypes: [],
-      selectedDepartment: '',
-      departments: []
-    };
-  },
-  methods: {
-    applyFilters() {
-      // Handle filters application logic here
-    }
-  }
-};
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+	name: "SidebarComponent",
+	data() {
+		return {
+			filter1: false,
+			filter2: false,
+			loading: true,
+			landTypes: [] as string[],
+			selectedTypes: [] as string[],
+			selectedDepartment: "",
+			departments: [] as Array<{ code: string; name: string }>,
+			cultureTypes: [] as string[],
+		};
+	},
+	methods: {
+		applyFilters(): void {
+			// Handle filters application logic here
+		},
+	},
+});
 </script>
 
 <style>

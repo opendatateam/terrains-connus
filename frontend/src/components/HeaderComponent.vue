@@ -1,14 +1,15 @@
 <template>
-  <header class="app-header">
-    <h1>Terrains Connus</h1>
-    <!-- Future tabs can be added here -->
+  <header>
+    <!-- Your header content -->
   </header>
 </template>
 
-<script>
-export default {
-  name: 'HeaderComponent'
-};
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+	name: "HeaderComponent",
+});
 </script>
 
 <style>
