@@ -34,7 +34,7 @@ const accordionItems = [
 
 <template>
   <div class="questions">
-    <h2>FAQ</h2>
+    <h2 class="faq-title">Questions fréquentes</h2>
     <Accordion type="single" class="w-full" collapsible :default-value="defaultValue">
       <AccordionItem v-for="item in accordionItems" :key="item.value" :value="item.value">
         <AccordionTrigger>{{ item.title }}</AccordionTrigger>
@@ -49,7 +49,21 @@ const accordionItems = [
 <style scoped>
 .questions {
   padding: 40px 20px;
-  max-width: 800px;
-  margin: auto;
+  margin: 0;
+  width: 100%; /* Étend la FAQ sur toute la largeur de l'écran */
+  box-sizing: border-box;
+  background-color: white; /* Fond blanc */
+  font-family: 'Geist', sans-serif; /* Application de la police Geist */
+}
+
+.faq-title {
+  text-align: left;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.accordion-item {
+  width: 100%;
+  font-family: 'Geist', sans-serif; /* Application de la police au contenu */
 }
 </style>
