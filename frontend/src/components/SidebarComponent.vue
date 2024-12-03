@@ -4,9 +4,6 @@
     <div v-else>
       <TileOne :selectedNatureCulture="selectedNatureCulture" @update:selectedNatureCulture="updateSelectedNatureCulture" />
       <TileTwo :selectedNatureCulture="selectedNatureCulture" />
-      zoom for debug : {{ toto }}
-      <br />
-      addressGPS : {{  tutu  }}
     </div>
   </aside>
 </template>
@@ -16,6 +13,7 @@ import { defineComponent, ref, onMounted, watch } from "vue";
 import TileOne from "./sidebar/TileOne.vue";
 import TileTwo from "./sidebar/TileTwo.vue";
 import { useAppStore } from '@/store/appStore.ts';
+
 
 export default defineComponent({
   name: "SidebarComponent",
@@ -68,7 +66,7 @@ export default defineComponent({
   position: fixed;
   top: 100px;
   left: 20px;
-  width: 250px;
+  width: 350px;
   background-color: white;
   padding: 20px;
   border-radius: 10px;
