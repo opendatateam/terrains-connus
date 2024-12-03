@@ -20,7 +20,7 @@ Chart.register(
   Legend
 );
 
-export default {
+export default defineComponent({
   name: "HistogramChart",
   props: {
     chartData: {
@@ -85,7 +85,7 @@ export default {
       });
     },
   },
-};
+});
 </script>
 
 <template>
