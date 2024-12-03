@@ -15,14 +15,30 @@
 </template>
 
 <script lang="ts">
+// Import the JSON file
 import parcellesData from "@/assets/json/parcelles.json";
 import { type PropType, defineComponent, onMounted, ref } from "vue";
+
+// Define the type for the parcellesData
+interface ParcelleData {
+	date_mutation: string;
+	nature_mutation: string;
+	valeur_fonciere: string;
+	code_commune: string;
+	id_parcelle: string;
+	nature_culture: string;
+	nature_culture_speciale: null;
+	// Add other fields as necessary
+	MOY_REND_FR_2019_2023: null;
+}
+
+type ParcellesData = Record<string, ParcelleData>;
 
 export default defineComponent({
 	name: "MapTooltipComponent",
 	props: {
 		tooltip: {
-			type: Object as PropType<{ mode: string; value: number }>,
+			type: Object as PropType<{ mode: string; value: number | string }>,
 			required: true,
 		},
 		tooltipTitle: {
@@ -32,12 +48,13 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const tooltipData = ref<Record<string, string>>({});
+		const tooltipData = ref<ParcelleData | null>(null);
 
-		const loadTooltipData = async () => {
+		const loadTooltipData = () => {
 			if (props.tooltip.mode === "parcelle") {
-				// Find the entry in parcellesData that matches the tooltip.value
-				tooltipData.value = parcellesData[props.tooltip.value] || null;
+				// Convert tooltip.value to a string to use as a key
+				const key = String(props.tooltip.value);
+				tooltipData.value = (parcellesData as ParcellesData)[key] || null;
 			}
 		};
 
