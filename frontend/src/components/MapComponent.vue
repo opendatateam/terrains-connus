@@ -50,8 +50,8 @@ export default defineComponent({
 
 		const calculateColor = (value: number) => {
 			const scaleMin = 0;
-			const scaleMax = 50000;
-			const pivot = 25000;
+			const scaleMax = 65000;
+			const pivot = 30000;
 
 			const scale = d3
 				.scaleLinear<string>()
