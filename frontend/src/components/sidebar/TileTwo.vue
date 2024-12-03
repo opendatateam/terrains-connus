@@ -58,7 +58,8 @@ export default defineComponent({
     });
 
     watch(() => appStore.mouseDep, (newValue: string) => {
-      data.value = monthDepData[appStore.option][newValue];
+      const interData = monthDepData[appStore.option as keyof typeof monthDepData];
+      data.value = interData[newValue as keyof typeof interData];
       level.value = appStore.mouseDepName;
       color.value = getColorsForNatureCulture(appStore.option)[3]
       chartKey.value++;
