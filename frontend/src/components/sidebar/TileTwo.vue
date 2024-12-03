@@ -52,6 +52,7 @@ export default defineComponent({
 
     watch(() => appStore.option, (newValue: string) => {
       data.value = monthNatData[newValue];
+      level.value = "National";
       color.value = getColorsForNatureCulture(appStore.option)[3]
       chartKey.value++;
     });
