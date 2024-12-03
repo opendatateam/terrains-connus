@@ -20,13 +20,12 @@
 </template>
 
 <script lang="ts">
-import testData from "@/assets/json/test.json";
+import fullPeriodData from "@/assets/json/full_period.json";
 import styleVector from "@/assets/json/vector.json";
 import { useAppStore } from "@/store/appStore.ts";
 import * as d3 from "d3-scale";
 import maplibregl, { type Map as MapLibreMap } from "maplibre-gl";
 import type {
-	LngLatBoundsLike,
 	LngLatLike,
 	StyleSpecification,
 } from "maplibre-gl";
@@ -51,8 +50,8 @@ export default defineComponent({
 
 		const calculateColor = (value: number) => {
 			const scaleMin = 0;
-			const scaleMax = 1000;
-			const pivot = 500;
+			const scaleMax = 50000;
+			const pivot = 25000;
 
 			const scale = d3
 				.scaleLinear<string>()
@@ -68,7 +67,7 @@ export default defineComponent({
 			const resultArray = [];
 			resultArray.push("match");
 			resultArray.push(["get", "code"]);
-			Object.entries(testData[value as keyof typeof testData]).forEach(
+			Object.entries(fullPeriodData[value as keyof typeof fullPeriodData]).forEach(
 				([key, value]) => {
 					resultArray.push(key, calculateColor(Number(value)));
 				},
@@ -127,8 +126,8 @@ export default defineComponent({
 					const depCode = e.features[0]["properties"]["code"];
 					tooltip.value.mode = "departement";
 					tooltip.value.value = (
-						testData[
-							appStore.option as keyof typeof testData
+						fullPeriodData[
+							appStore.option as keyof typeof fullPeriodData
 						] as unknown as Record<string, number>
 					)[depCode];
 					tooltip.value.visibility = "visible";
