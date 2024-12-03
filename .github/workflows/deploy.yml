@@ -25,6 +25,9 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Clear Bun Cache
+        run: bun cache clean
+
       - name: Install Dependencies
         working-directory: ./frontend
         run: bun install
