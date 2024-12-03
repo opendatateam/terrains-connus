@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <script>
+      // Get the current path excluding the base URL
+      const segment = window.location.pathname.replace('/terrains-connus/', '');
+      // Redirect to the main app with the correct path
+      window.location.replace('/terrains-connus/#/' + segment);
+    </script>
+  </head>
+  <body>
+    Redirecting...
+  </body>
+</html> 
