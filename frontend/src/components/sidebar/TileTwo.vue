@@ -30,7 +30,7 @@ export default defineComponent({
   setup(props) {
     const appStore = useAppStore();
 
-    const data = ref(monthNatData["P"]);
+    const data = ref(monthNatData["P" as keyof typeof monthNatData]);
     const chartKey = ref(0);
     const color = ref("#388E3C");
 
@@ -51,7 +51,7 @@ export default defineComponent({
     });
 
     watch(() => appStore.option, (newValue: string) => {
-      data.value = monthNatData[newValue];
+      data.value = monthNatData[newValue as keyof typeof monthNatData];
       level.value = "National";
       color.value = getColorsForNatureCulture(appStore.option)[3]
       chartKey.value++;
