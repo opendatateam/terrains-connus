@@ -7,6 +7,8 @@ export const useAppStore = defineStore('appStore', {
     address: [1,1],
     mouseDep: "",
     mouseDepName: "",
+    codeInsee: "",
+    comData: {},
   }),
   actions: {
     updateOption(newOption: string) {
@@ -24,5 +26,11 @@ export const useAppStore = defineStore('appStore', {
     updateMouseDepName(depName: string){
         this.mouseDepName = depName;
     },
+    updateCodeInsee(code: string){
+        this.codeInsee = code;
+    },
+    updateComData(data: Object){
+        this.comData = data;
+    }
   },
 });

@@ -62,7 +62,7 @@
         <div class="addressPropositions" v-if="resultsAdresses">
           <span v-if="resultsAdresses">
             <span v-bind:key="item.properties.banId" v-for="item in resultsAdresses.features">
-              <div class="addressProposition" @click="goToAddress(item.geometry.coordinates)">{{  item.properties.label }}</div>
+              <div class="addressProposition" @click="goToAddress(item.geometry.coordinates, item.properties.citycode)">{{  item.properties.label }}</div>
             </span>
           </span></div>
       </div>
@@ -86,6 +86,7 @@ import tableGreyIcon from "@/assets/tablegrey.svg";
 interface AddressFeature {
 	banId: string;
 	label: string;
+  citycode: string;
 }
 
 interface Geometry {
@@ -139,8 +140,9 @@ export default defineComponent({
 				});
 		};
 
-		const goToAddress = (coordinates: Array<number>) => {
+		const goToAddress = (coordinates: Array<number>, code: string) => {
 			appStore.updateAddress(coordinates);
+      appStore.updateCodeInsee(code);
 			resultsAdresses.value = null;
 		};
 

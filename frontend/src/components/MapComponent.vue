@@ -38,6 +38,7 @@ export default defineComponent({
 		let displayDepLayer = true;
 		const tooltipTitle = ref(""); // Initialize as an empty string
 
+
 		const tooltip = ref({
 			top: "0px",
 			left: "0px",
@@ -91,7 +92,7 @@ export default defineComponent({
 			const tooltipX = e.point.x;
 			const tooltipY = e.point.y;
 			tooltip.value.top = `${tooltipY}px`;
-			tooltip.value.left = `${tooltipY}px`;
+			tooltip.value.left = `${tooltipX}px`;
 			if (tooltip.value.mode === "parcelle") {
 				// No need to set tooltipData here anymore
 			}
@@ -180,6 +181,21 @@ export default defineComponent({
 					zoom: 16,
 				});
 			},
+		);
+
+		watch(
+			() => appStore.codeInsee,
+			(newValue: string) => {	
+				fetch(
+					"https://object.data.gouv.fr/dataeng-open/dev/parcelles/" + appStore.codeInsee + ".json"
+				)
+					.then((response) => {
+						return response.json();
+					})
+					.then((data) => {
+						appStore.updateComData(data)
+					});
+				},
 		);
 
 		watch(

@@ -2,10 +2,16 @@
 	<div class="tooltip_body">
 		<b>{{ tooltipTitle }}</b>
 		<br />
-		<span v-if="tooltip.mode === 'parcelle'">Parcelle numéro </span>
-		{{ tooltip.value }}
-		<span v-if="tooltip.mode === 'departement'"> transactions</span>
-		<!-- Display additional tooltipData here -->
+		<span v-if="tooltip.mode === 'parcelle'">
+			<div v-if="comData[tooltip.value as keyof typeof comData]['nature_mutation']"><h2><b>{{  comData[tooltip.value as keyof typeof comData]['nature_mutation'] }} - {{ tooltip.value }}</b></h2></div>
+			<div v-if="comData[tooltip.value as keyof typeof comData]['valeur_fonciere']">Prix : {{  comData[tooltip.value as keyof typeof comData]['valeur_fonciere'] }} euros</div>
+			<div v-if="comData[tooltip.value as keyof typeof comData]['nature_culture']">Nature Culture DVF : {{  comData[tooltip.value as keyof typeof comData]['nature_culture'] }}</div>
+			<div v-if="comData[tooltip.value as keyof typeof comData]['CODE_CULTURE']">Nature Culture RPG : {{  comData[tooltip.value as keyof typeof comData]['CODE_CULTURE'] }}</div>
+			<div v-if="comData[tooltip.value as keyof typeof comData]['surface_terrain']">Surface DVF : {{  comData[tooltip.value as keyof typeof comData]['surface_terrain'] }} m2</div>
+			<div v-if="comData[tooltip.value as keyof typeof comData]['surf_rpg']">Surface RPG : {{  comData[tooltip.value as keyof typeof comData]['surf_rpg'] }} m2</div>
+			<div v-if="comData[tooltip.value as keyof typeof comData]['bio']">Bio : {{  comData[tooltip.value as keyof typeof comData]['bio'] }}</div>
+		</span>
+		<span v-if="tooltip.mode === 'departement'">{{ tooltip.value }} transactions</span>
 		<div v-if="tooltipData">
 			<p v-for="(value, key) in tooltipData" :key="key">
 				{{ key }}: {{ value }}
@@ -17,7 +23,8 @@
 <script lang="ts">
 // Import the JSON file
 import parcellesData from "@/assets/json/parcelles.json";
-import { type PropType, defineComponent, onMounted, ref } from "vue";
+import { type PropType, defineComponent, onMounted, ref, watch } from "vue";
+import { useAppStore } from "@/store/appStore.ts";
 
 // Define the type for the parcellesData
 export interface ParcelleData {
@@ -44,9 +51,12 @@ export default defineComponent({
 			type: String,
 			required: true,
 			default: "",
-		},
+		}
 	},
+
 	setup(props) {
+		const appStore = useAppStore();
+		const comData = ref({})
 		const tooltipData = ref<ParcelleData | null>(null);
 
 		const loadTooltipData = () => {
@@ -61,7 +71,10 @@ export default defineComponent({
 			loadTooltipData();
 		});
 
-		return { tooltipData };
+		watch(() => appStore.comData, (newValue: Object) => {
+			comData.value = newValue;
+		});
+		return { tooltipData, comData };
 	},
 });
 </script>

@@ -39,14 +39,19 @@ export default defineComponent({
 
     const toto = ref(1)
     const tutu = ref([1,1])
+    const tata = ref({})
 
 		watch(() => appStore.mapZoom, (newValue: number) => {
 			toto.value = newValue;
 		});
 
-		watch(() => appStore.address, (newValue: Array<number>) => {
-			tutu.value = newValue;
-		});
+    watch(() => appStore.address, (newValue: Array<number>) => {
+      tutu.value = newValue;
+    });
+
+    watch(() => appStore.comData, (newValue: Object) => {
+      tata.value = newValue;
+    });
 
     return {
       loading,
@@ -55,6 +60,7 @@ export default defineComponent({
       appStore,
       toto,
       tutu,
+      tata,
     };
   },
 });
