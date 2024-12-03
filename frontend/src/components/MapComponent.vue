@@ -48,15 +48,14 @@ export default defineComponent({
 			value: 0,
 		});
 
-		const calculateColor = (value: number) => {
+		const calculateColor = (value: number, scaleMax: number) => {
 			const scaleMin = 0;
-			const scaleMax = 65000;
-			const pivot = 30000;
-
+			const pivot = scaleMax / 2;
+			
 			const scale = d3
 				.scaleLinear<string>()
 				.domain([scaleMin, pivot, scaleMax])
-				.range(["#F8FAFC", "#475569", "#020617"]);
+				.range(["#FFFFFF", "#FFEF74", "#D1C060", "#A5934D", "#816E3D", "#56422A"]);
 
 			return scale(value);
 		};
@@ -67,9 +66,12 @@ export default defineComponent({
 			const resultArray = [];
 			resultArray.push("match");
 			resultArray.push(["get", "code"]);
-			Object.entries(fullPeriodData[value as keyof typeof fullPeriodData]).forEach(
+			const entries = Object.entries(fullPeriodData[value as keyof typeof fullPeriodData]);
+			const maxValue = Math.max(...entries.map(([_, value]) => Number(value)));
+			console.log(maxValue);
+			entries.forEach(
 				([key, value]) => {
-					resultArray.push(key, calculateColor(Number(value)));
+					resultArray.push(key, calculateColor(Number(value), maxValue));
 				},
 			);
 			resultArray.push("#CCCCCC");
@@ -104,7 +106,7 @@ export default defineComponent({
 					source: "decoupage-administratif",
 					"source-layer": "departements",
 					paint: {
-						"fill-opacity": 0.5,
+						"fill-opacity": 0.6,
 					},
 				});
 
