@@ -1,17 +1,21 @@
 <template>
 	<div class="tooltip_body">
-		<b>{{ tooltipTitle }}</b>
-		<br />
-		<span v-if="tooltip.mode === 'parcelle'">
-			<div v-if="comData[tooltip.value as keyof typeof comData]['nature_mutation']"><h2><b>{{  comData[tooltip.value as keyof typeof comData]['nature_mutation'] }} - {{ tooltip.value }}</b></h2></div>
+		<span v-if="tooltip.mode === 'parcelle' && tooltip.value">
+			<h1><b>Demandes de valeurs foncières</b></h1>
+			<div v-if="comData[tooltip.value as keyof typeof comData]['nature_mutation']">Nature mutation : {{  comData[tooltip.value as keyof typeof comData]['nature_mutation'] }}</div>
 			<div v-if="comData[tooltip.value as keyof typeof comData]['valeur_fonciere']">Prix : {{  comData[tooltip.value as keyof typeof comData]['valeur_fonciere'] }} euros</div>
-			<div v-if="comData[tooltip.value as keyof typeof comData]['nature_culture']">Nature Culture DVF : {{  comData[tooltip.value as keyof typeof comData]['nature_culture'] }}</div>
-			<div v-if="comData[tooltip.value as keyof typeof comData]['CODE_CULTURE']">Nature Culture RPG : {{  comData[tooltip.value as keyof typeof comData]['CODE_CULTURE'] }}</div>
-			<div v-if="comData[tooltip.value as keyof typeof comData]['surface_terrain']">Surface DVF : {{  comData[tooltip.value as keyof typeof comData]['surface_terrain'] }} m2</div>
-			<div v-if="comData[tooltip.value as keyof typeof comData]['surf_rpg']">Surface RPG : {{  comData[tooltip.value as keyof typeof comData]['surf_rpg'] }} m2</div>
+			<div v-if="comData[tooltip.value as keyof typeof comData]['surface_terrain']">Surface : {{  comData[tooltip.value as keyof typeof comData]['surface_terrain'] }} m2</div>
+			<div v-if="comData[tooltip.value as keyof typeof comData]['date_mutation']">Date : {{  comData[tooltip.value as keyof typeof comData]['date_mutation'] }} euros</div>
+			<div v-if="comData[tooltip.value as keyof typeof comData]['nature_culture']">Nature Culture : {{  comData[tooltip.value as keyof typeof comData]['nature_culture'] }}</div>
+			<div v-if="comData[tooltip.value as keyof typeof comData]['nature_culture_speciale']">Nature Culture Spéciale : {{  comData[tooltip.value as keyof typeof comData]['nature_culture_speciale'] }}</div>
+			<h1 v-if="comData[tooltip.value as keyof typeof comData]['surf_rpg']"><b>Registre Parcellaire Graphique</b></h1>
+			<div v-if="comData[tooltip.value as keyof typeof comData]['surf_rpg']">Surface : {{  comData[tooltip.value as keyof typeof comData]['surf_rpg'] }} m2</div>
+			<div v-if="comData[tooltip.value as keyof typeof comData]['LIBELLE_CULTU']">Nature Culture : {{  comData[tooltip.value as keyof typeof comData]['LIBELLE_CULTU'] }}</div>
 			<div v-if="comData[tooltip.value as keyof typeof comData]['bio']">Bio : {{  comData[tooltip.value as keyof typeof comData]['bio'] }}</div>
+			<h1 v-if="comData[tooltip.value as keyof typeof comData]['MOY_REND_2019_2023']"><b>Statistiques agricoles annuelles</b></h1>
+			<div v-if="comData[tooltip.value as keyof typeof comData]['MOY_REND_2019_2023']">Rendement moyen : {{  comData[tooltip.value as keyof typeof comData]['MOY_REND_2019_2023'] }}</div>
 		</span>
-		<span v-if="tooltip.mode === 'departement'">{{ tooltip.value }} transactions</span>
+		<span v-if="tooltip.mode === 'departement'"><b>{{ tooltipTitle }}</b><br />{{ tooltip.value }} transactions</span>
 		<div v-if="tooltipData">
 			<p v-for="(value, key) in tooltipData" :key="key">
 				{{ key }}: {{ value }}
@@ -81,6 +85,7 @@ export default defineComponent({
 
 <style scoped>
 .tooltip_body {
+	width: 300px;
 	padding-left: 0.75rem;
 	padding-top: 0.25rem;
 	padding-right: 0.75rem;
