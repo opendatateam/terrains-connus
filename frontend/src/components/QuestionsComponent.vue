@@ -34,7 +34,7 @@ const accordionItems = [
 
 <template>
   <div class="questions">
-    <h2 class="faq-title">Questions fréquentes</h2>
+    <h2 class="faq-title">À propos de Terrains Connus</h2>
     <Accordion type="single" class="w-full" collapsible :default-value="defaultValue">
       <AccordionItem v-for="item in accordionItems" :key="item.value" :value="item.value">
         <AccordionTrigger>{{ item.title }}</AccordionTrigger>
@@ -43,6 +43,15 @@ const accordionItems = [
         </AccordionContent>
       </AccordionItem>
     </Accordion>
+    <!-- Bouton Tally -->
+    <div class="tally-button-container">
+      <button
+        class="tally-button"
+        data-tally-open="mRZ7jP"
+      >
+        Donnez-nous votre avis
+      </button>
+    </div>
   </div>
 </template>
 
@@ -65,5 +74,26 @@ const accordionItems = [
 .accordion-item {
   width: 100%;
   font-family: 'Geist', sans-serif; /* Application de la police au contenu */
+}
+
+.tally-button-container {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.tally-button {
+  background-color: #0F172A;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.tally-button:hover {
+  background-color: #475569;
 }
 </style>

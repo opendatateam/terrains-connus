@@ -35,8 +35,7 @@ export default defineComponent({
 
 /* Le titre est aligné à gauche */
 .tableau-title {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.8rem;
   margin-bottom: 10px;
   text-align: left;
   color: #020817; /* Couleur du titre */

@@ -47,7 +47,7 @@
               alt="Questions Icon"
               class="nav-icon"
             />
-            Questions
+            À propos
           </router-link>
         </nav>
         <!-- Barre de recherche -->
