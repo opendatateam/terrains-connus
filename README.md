@@ -2,20 +2,24 @@
 
 Project for the hackathon "données alimentaires" on 2024 December 2nd/3rd.
 
-## Description
+"Terrains Connus" permet d'obtenir une vue d’ensemble des terres vendues, classées par typologie, et accédez rapidement aux détails spécifiques de chaque transaction, incluant son prix et sa classification.
 
-Obtenez une vue d’ensemble des terres vendues, classées par typologie, et accédez rapidement aux détails spécifiques de chaque transaction, incluant son prix et sa classification.
+## Frontend
 
-## Deployment
+```sh
+cd frontend
+```
+
+### Deployment
 
 This project is automatically deployed to [https://opendatateam.github.io/terrains-connus/](https://opendatateam.github.io/terrains-connus/) whenever changes are pushed to the `main` branch. 
 
 You can check the status of the deployment by visiting the [GitHub Actions page](https://github.com/opendatateam/terrains-connus/actions) for this repository.
 
 
-## Run locally
+### Run locally
 
-### Dependencies
+#### Dependencies
 
 You need to have [Bun](https://bun.sh/) installed to be able to run the project.
 To install Bun:
@@ -23,20 +27,26 @@ To install Bun:
 curl -fsSL https://bun.sh/install | bash
 ```
 
-### Project Setup
+#### Project Setup
 
 ```sh
 bun install
 ```
 
-### Compile and Hot-Reload for Development
+#### Compile and Hot-Reload for Development
 
 ```sh
 bun dev
 ```
 
-### Type-Check, Compile and Minify for Production
+#### Compile for Production
 
 ```sh
 bun run build
+```
+
+### Lint and format code
+
+```sh
+biome check --write src/.
 ```
