@@ -13,7 +13,7 @@ export enum NatureCulture {
 	VI = "Vignes",
 }
 
-export function fromCsv(csvLandUse: string): NatureCulture {
+export function fromJson(key: string): NatureCulture {
 	const mapping: { [key: string]: NatureCulture } = {
 		landes: NatureCulture.L,
 		prés: NatureCulture.P,
@@ -28,5 +28,5 @@ export function fromCsv(csvLandUse: string): NatureCulture {
 		vergers: NatureCulture.VE,
 		vignes: NatureCulture.VI,
 	};
-	return mapping[csvLandUse.toLowerCase()] || NatureCulture.T;
+	return mapping[key.toLowerCase()];
 }
