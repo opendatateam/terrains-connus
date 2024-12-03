@@ -6,13 +6,11 @@
 			v-show="tooltip.visibility == 'visible'"
 			:style="{ top: tooltip.top, left: tooltip.left }"
 		>
-		<div class="tooltip_body">
-			<b>{{ depName }}</b>
-			<br />
-			<span v-if="tooltip.mode == 'parcelle'">parcelle numéro </span>
-			{{ tooltip.value }}
-			<span v-if="tooltip.mode == 'departement'"> transactions</span>
-		</div>
+			<MapTooltipComponent
+				:tooltip="tooltip"
+				:tooltipTitle="tooltipTitle"
+				:tooltipData="tooltipData"
+			/>
 		</div>
 		<div id="map" style="width: 100%; height: 100vh;"></div>
 		<div id="sidebar" class="floating-sidebar"></div>
@@ -22,6 +20,7 @@
 <script lang="ts">
 import fullPeriodData from "@/assets/json/full_period.json";
 import styleVector from "@/assets/json/vector.json";
+import MapTooltipComponent from "@/components/map/MapTooltipComponent.vue";
 import { useAppStore } from "@/store/appStore.ts";
 import { getColorsForNatureCulture } from "@/types/NatureCulture";
 import * as d3 from "d3-scale";
@@ -31,11 +30,15 @@ import { type Ref, defineComponent, onMounted, ref, watch } from "vue";
 
 export default defineComponent({
 	name: "MapComponent",
+	components: {
+		MapTooltipComponent,
+	},
 	setup() {
 		const appStore = useAppStore();
 		const map: Ref<MapLibreMap | null> = ref(null);
 		let displayDepLayer = true;
-		const depName = ref(null);
+		const tooltipTitle = ref(""); // Initialize as an empty string
+		const tooltipData = ref({});
 
 		const tooltip = ref({
 			top: "0px",
@@ -72,12 +75,12 @@ export default defineComponent({
 				fullPeriodData[natureCultureCode as keyof typeof fullPeriodData],
 			);
 			const maxValue = Math.max(...entries.map(([_, value]) => Number(value)));
-			entries.forEach(([key, value]) => {
+			for (const [key, value] of entries) {
 				resultArray.push(
 					key,
 					calculateColor(Number(value), natureCultureCode, maxValue),
 				);
-			});
+			}
 			resultArray.push("#CCCCCC");
 			map.value.setPaintProperty(
 				"departements_fill",
@@ -89,8 +92,17 @@ export default defineComponent({
 		const displayTooltip = (e: any) => {
 			const tooltipX = e.point.x;
 			const tooltipY = e.point.y;
-			tooltip.value.top = tooltipY + "px";
-			tooltip.value.left = tooltipX + "px";
+			tooltip.value.top = `${tooltipY}px`;
+			tooltip.value.left = `${tooltipY}px`;
+			if (tooltip.value.mode === "parcelle") {
+				// Fetch or set additional data for parcelle
+				tooltipData.value = {
+					// Example data
+					owner: "John Doe",
+					area: "500 sqm",
+					// Add more fields as needed
+				};
+			}
 		};
 
 		onMounted(() => {
@@ -128,7 +140,7 @@ export default defineComponent({
 				});
 
 				mapInstance.on("mousemove", "departements_fill", (e: any) => {
-					depName.value = e.features[0]["properties"]["nom"];
+					tooltipTitle.value = e.features[0]["properties"]["nom"];
 					const depCode = e.features[0]["properties"]["code"];
 					tooltip.value.mode = "departement";
 					tooltip.value.value = (
@@ -201,7 +213,7 @@ export default defineComponent({
 			},
 		);
 
-		return { map, tooltip, depName };
+		return { map, tooltip, tooltipTitle, tooltipData };
 	},
 });
 </script>

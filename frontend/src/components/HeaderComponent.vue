@@ -71,94 +71,95 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from "vue";
+import { useAppStore } from "@/store/appStore.ts";
+import { computed, defineComponent, ref } from "vue";
 import { useRoute } from "vue-router";
-import { useAppStore } from '@/store/appStore.ts';
 
+import lightBlackIcon from "@/assets/lightblack.svg";
+import lightGreyIcon from "@/assets/lightgrey.svg";
 /* Importation des icônes */
 import mapBlackIcon from "@/assets/mapblack.svg";
 import mapGreyIcon from "@/assets/mapgrey.svg";
 import tableBlackIcon from "@/assets/tableblack.svg";
 import tableGreyIcon from "@/assets/tablegrey.svg";
-import lightBlackIcon from "@/assets/lightblack.svg";
-import lightGreyIcon from "@/assets/lightgrey.svg";
 
 interface AddressFeature {
-  banId: string;
-  label: string;
+	banId: string;
+	label: string;
 }
 
-interface Geometry{
-  coordinates: Array<number>
+interface Geometry {
+	coordinates: Array<number>;
 }
 
-interface Feature{
-  properties: AddressFeature
-  geometry: Geometry
+interface Feature {
+	properties: AddressFeature;
+	geometry: Geometry;
 }
 
 interface ResultsAdresses {
-  features: Feature[];
+	features: Feature[];
 }
 
 export default defineComponent({
-  setup() {
-    const route = useRoute();
-    const appStore = useAppStore();
+	setup() {
+		const route = useRoute();
+		const appStore = useAppStore();
 
-    const isMapRoute = computed(() => route.path === "/" || route.path === "/map");
-    const isTableRoute = computed(() => route.path === "/tableau");
-    const isQuestionsRoute = computed(() => route.path === "/questions");
-    const searchAdress = ref("")
-    const resultsAdresses = ref<ResultsAdresses | null>(null)
+		const isMapRoute = computed(
+			() => route.path === "/" || route.path === "/map",
+		);
+		const isTableRoute = computed(() => route.path === "/tableau");
+		const isQuestionsRoute = computed(() => route.path === "/questions");
+		const searchAdress = ref("");
+		const resultsAdresses = ref<ResultsAdresses | null>(null);
 
-    const autoComplete = () => {
-      if (searchAdress.value.length === 0) {
-        resultsAdresses.value = null;
-      }
-      let search = searchAdress.value;
-      let timer = setTimeout(() => {
-        if (searchAdress.value === search) {
-          getAdresses();
-        }
-      }, 650);
-    }
+		const autoComplete = () => {
+			if (searchAdress.value.length === 0) {
+				resultsAdresses.value = null;
+			}
+			const search = searchAdress.value;
+			const timer = setTimeout(() => {
+				if (searchAdress.value === search) {
+					getAdresses();
+				}
+			}, 650);
+		};
 
+		const getAdresses = () => {
+			fetch(
+				"https://api-adresse.data.gouv.fr/search/?q=" +
+					searchAdress.value.replace(" ", "%20"),
+			)
+				.then((response) => {
+					return response.json();
+				})
+				.then((data) => {
+					resultsAdresses.value = data;
+				});
+		};
 
-    const getAdresses = () => {
-      fetch(
-        "https://api-adresse.data.gouv.fr/search/?q=" +
-        searchAdress.value.replace(" ", "%20")
-      )
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          resultsAdresses.value = data;
-        });
-    }
+		const goToAddress = (coordinates: Array<number>) => {
+			appStore.updateAddress(coordinates);
+			resultsAdresses.value = null;
+		};
 
-    const goToAddress = (coordinates: Array<number>) => {
-      appStore.updateAddress(coordinates)
-      resultsAdresses.value = null;
-    }
-
-    return {
-      isMapRoute,
-      isTableRoute,
-      isQuestionsRoute,
-      mapBlackIcon,
-      mapGreyIcon,
-      tableBlackIcon,
-      tableGreyIcon,
-      lightBlackIcon,
-      lightGreyIcon,
-      searchAdress,
-      autoComplete,
-      resultsAdresses,
-      goToAddress,
-    };
-  },
+		return {
+			isMapRoute,
+			isTableRoute,
+			isQuestionsRoute,
+			mapBlackIcon,
+			mapGreyIcon,
+			tableBlackIcon,
+			tableGreyIcon,
+			lightBlackIcon,
+			lightGreyIcon,
+			searchAdress,
+			autoComplete,
+			resultsAdresses,
+			goToAddress,
+		};
+	},
 });
 </script>
 
