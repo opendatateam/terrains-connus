@@ -2,7 +2,7 @@
   <div class="tile">
     <h2 class="font-bold mb-2">{{ natureCultureFullName }}</h2>
     <p><b>Transactions - {{ level }}</b></p>
-    <span v-if="data.length > 0"><HistogramChart :chartData="data" :key="chartKey" /></span>
+    <span v-if="data.length > 0"><HistogramChart :chartData="data" :key="chartKey" :colorHisto="color" /></span>
     <span v-else>Il n'y a pas de transactions pour ce département.</span>
   </div>
 </template>
@@ -14,6 +14,7 @@ import HistogramChart from '@/components/HistogramChart.vue';
 import monthDepData from "@/assets/json/dvf_month_agri.json";
 import monthNatData from "@/assets/json/dvf_month_agri_nat.json";
 import { useAppStore } from '@/store/appStore.ts';
+import { getColorsForNatureCulture } from "@/types/NatureCulture";
 
 export default defineComponent({
   name: "TileTwo",
@@ -31,6 +32,7 @@ export default defineComponent({
 
     const data = ref(monthNatData["P"]);
     const chartKey = ref(0);
+    const color = ref("#388E3C");
 
     const options = {
       plugins: {
@@ -50,12 +52,14 @@ export default defineComponent({
 
     watch(() => appStore.option, (newValue: string) => {
       data.value = monthNatData[newValue];
+      color.value = getColorsForNatureCulture(appStore.option)[3]
       chartKey.value++;
     });
 
     watch(() => appStore.mouseDep, (newValue: string) => {
       data.value = monthDepData[appStore.option][newValue];
       level.value = appStore.mouseDepName;
+      color.value = getColorsForNatureCulture(appStore.option)[3]
       chartKey.value++;
     });
 
@@ -65,6 +69,7 @@ export default defineComponent({
       options,
       chartKey,
       level,
+      color,
     };
   },
 });

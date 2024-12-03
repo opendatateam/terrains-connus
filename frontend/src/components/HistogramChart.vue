@@ -27,6 +27,10 @@ export default {
       type: Array,
       required: true,
     },
+    colorHisto: {
+      type: String,
+      required: true,
+    }
   },
   mounted() {
     this.$nextTick(() => {
@@ -52,8 +56,8 @@ export default {
             {
               label: "Transactions",
               data: values,
-              backgroundColor: "rgba(75, 192, 192, 0.2)",
-              borderColor: "rgba(75, 192, 192, 1)",
+              backgroundColor: this.colorHisto,
+              borderColor: this.colorHisto,
               borderWidth: 1,
             },
           ],

@@ -14,7 +14,6 @@ import TileOne from "./sidebar/TileOne.vue";
 import TileTwo from "./sidebar/TileTwo.vue";
 import { useAppStore } from '@/store/appStore.ts';
 
-
 export default defineComponent({
   name: "SidebarComponent",
   components: {
