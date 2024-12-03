@@ -20,21 +20,25 @@
 </template>
 
 <script lang="ts">
-import maplibregl, { type Map as MapLibreMap } from "maplibre-gl";
-import type { LngLatBoundsLike, LngLatLike, StyleSpecification } from "maplibre-gl";
-import { type Ref, defineComponent, onMounted, ref, watch } from "vue";
-import styleVector from "@/assets/json/vector.json";
 import testData from "@/assets/json/test.json";
+import styleVector from "@/assets/json/vector.json";
+import { useAppStore } from "@/store/appStore.ts";
 import * as d3 from "d3-scale";
-import { useAppStore } from '@/store/appStore.ts';
+import maplibregl, { type Map as MapLibreMap } from "maplibre-gl";
+import type {
+	LngLatBoundsLike,
+	LngLatLike,
+	StyleSpecification,
+} from "maplibre-gl";
+import { type Ref, defineComponent, onMounted, ref, watch } from "vue";
 
 export default defineComponent({
 	name: "MapComponent",
 	setup() {
 		const appStore = useAppStore();
 		const map: Ref<MapLibreMap | null> = ref(null);
-		let displayDepLayer = true
-		const depName = ref(null)
+		let displayDepLayer = true;
+		const depName = ref(null);
 
 		const tooltip = ref({
 			top: "0px",
@@ -43,7 +47,7 @@ export default defineComponent({
 			mode: "departement",
 			visibility: "",
 			value: 0,
-		})
+		});
 
 		const calculateColor = (value: number) => {
 			const scaleMin = 0;
@@ -61,26 +65,28 @@ export default defineComponent({
 		const updateMap = (value: string) => {
 			if (!map.value) return;
 
-			let resultArray = [];
-			resultArray.push("match")
-			resultArray.push(["get", "code"])
-			Object.entries(testData[value as keyof typeof testData]).forEach(([key, value]) => {
-				resultArray.push(key, calculateColor(Number(value)));
-			});
-			resultArray.push("#CCCCCC")
+			const resultArray = [];
+			resultArray.push("match");
+			resultArray.push(["get", "code"]);
+			Object.entries(testData[value as keyof typeof testData]).forEach(
+				([key, value]) => {
+					resultArray.push(key, calculateColor(Number(value)));
+				},
+			);
+			resultArray.push("#CCCCCC");
 			map.value.setPaintProperty(
 				"departements_fill",
 				"fill-color",
-				resultArray
-			);              
-		}
+				resultArray,
+			);
+		};
 
 		const displayTooltip = (e: any) => {
-			let tooltipX = e.point.x;
-			let tooltipY = e.point.y;
+			const tooltipX = e.point.x;
+			const tooltipY = e.point.y;
 			tooltip.value.top = tooltipY + "px";
 			tooltip.value.left = tooltipX + "px";
-		}
+		};
 
 		onMounted(() => {
 			const mapInstance: MapLibreMap = new maplibregl.Map({
@@ -93,7 +99,6 @@ export default defineComponent({
 			});
 
 			mapInstance.on("load", () => {
-
 				mapInstance.addLayer({
 					id: "departements_fill",
 					type: "fill",
@@ -104,7 +109,6 @@ export default defineComponent({
 					},
 				});
 
-
 				mapInstance.addLayer({
 					id: "parcelles_fill",
 					type: "fill",
@@ -112,31 +116,33 @@ export default defineComponent({
 					filter: ["has", "dvf"],
 					"source-layer": "parcelles",
 					minzoom: 13,
-            		maxzoom: 18,
+					maxzoom: 18,
 					paint: {
-					"fill-color": "rgba(0, 0, 255, 0.2)",
+						"fill-color": "rgba(0, 0, 255, 0.2)",
 					},
 				});
 
-
 				mapInstance.on("mousemove", "departements_fill", (e: any) => {
 					depName.value = e.features[0]["properties"]["nom"];
-					let depCode = e.features[0]["properties"]["code"];
-					tooltip.value.mode = "departement"
-					tooltip.value.value = (testData[appStore.option as keyof typeof testData] as unknown as Record<string, number>)[depCode];	
-					tooltip.value.visibility = "visible"		
-					displayTooltip(e)
+					const depCode = e.features[0]["properties"]["code"];
+					tooltip.value.mode = "departement";
+					tooltip.value.value = (
+						testData[
+							appStore.option as keyof typeof testData
+						] as unknown as Record<string, number>
+					)[depCode];
+					tooltip.value.visibility = "visible";
+					displayTooltip(e);
 				});
-
 
 				mapInstance.on("mousemove", "parcelles_fill", (e: any) => {
-					let parcelleCode = e.features[0]["properties"]["id"];
-					tooltip.value.mode = "parcelle"
+					const parcelleCode = e.features[0]["properties"]["id"];
+					tooltip.value.mode = "parcelle";
 					tooltip.value.value = parcelleCode;
-					tooltip.value.visibility = "visible"		
-					displayTooltip(e)
+					tooltip.value.visibility = "visible";
+					displayTooltip(e);
 				});
-				
+
 				updateMap("P");
 			});
 
@@ -147,45 +153,51 @@ export default defineComponent({
 			map.value = mapInstance;
 		});
 
-		watch(() => appStore.option, (newValue: string) => {
-			updateMap(newValue);
-		});
+		watch(
+			() => appStore.option,
+			(newValue: string) => {
+				updateMap(newValue);
+			},
+		);
 
-		watch(() => appStore.address, (newValue: Array<number>) => {
-			if(!map.value) return;
-			map.value.flyTo({
-				center: newValue as LngLatLike,
-				zoom: 16,
-			});
-		});
+		watch(
+			() => appStore.address,
+			(newValue: Array<number>) => {
+				if (!map.value) return;
+				map.value.flyTo({
+					center: newValue as LngLatLike,
+					zoom: 16,
+				});
+			},
+		);
 
-		watch(() => appStore.mapZoom, (newValue: number) => {
-			if (!map.value) return;
-			if (displayDepLayer && newValue > 13) {
-				displayDepLayer = false;
-				tooltip.value.visibility = ""
-				map.value.setLayoutProperty(
-					"departements_fill",
-					"visibility",
-					"none"
-				);
-			}
-			if (!displayDepLayer && newValue <= 13) {
-				displayDepLayer = true;
-				tooltip.value.visibility = "visible"
-				map.value.setLayoutProperty(
-					"departements_fill",
-					"visibility",
-					"visible"
-				);
-			}
-		});
-
+		watch(
+			() => appStore.mapZoom,
+			(newValue: number) => {
+				if (!map.value) return;
+				if (displayDepLayer && newValue > 13) {
+					displayDepLayer = false;
+					tooltip.value.visibility = "";
+					map.value.setLayoutProperty(
+						"departements_fill",
+						"visibility",
+						"none",
+					);
+				}
+				if (!displayDepLayer && newValue <= 13) {
+					displayDepLayer = true;
+					tooltip.value.visibility = "visible";
+					map.value.setLayoutProperty(
+						"departements_fill",
+						"visibility",
+						"visible",
+					);
+				}
+			},
+		);
 
 		return { map, tooltip, depName };
 	},
-
-	
 });
 </script>
 
