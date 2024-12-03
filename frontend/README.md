@@ -1,6 +1,10 @@
 # Terrains Connus
 
-Project for the hackathon données alimentaires.
+Project for the hackathon "données alimentaires" on 2024 December 2nd/3rd.
+
+## Description
+
+Obtenez une vue d’ensemble des terres vendues, classées par typologie, et accédez rapidement aux détails spécifiques de chaque transaction, incluant son prix et sa classification.
 
 ## Deployment
 
