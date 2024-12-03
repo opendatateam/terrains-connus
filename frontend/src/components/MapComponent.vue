@@ -23,12 +23,10 @@
 import fullPeriodData from "@/assets/json/full_period.json";
 import styleVector from "@/assets/json/vector.json";
 import { useAppStore } from "@/store/appStore.ts";
+import { getColorsForNatureCulture } from "@/types/NatureCulture";
 import * as d3 from "d3-scale";
 import maplibregl, { type Map as MapLibreMap } from "maplibre-gl";
-import type {
-	LngLatLike,
-	StyleSpecification,
-} from "maplibre-gl";
+import type { LngLatLike, StyleSpecification } from "maplibre-gl";
 import { type Ref, defineComponent, onMounted, ref, watch } from "vue";
 
 export default defineComponent({
@@ -48,32 +46,38 @@ export default defineComponent({
 			value: 0,
 		});
 
-		const calculateColor = (value: number, scaleMax: number) => {
+		const calculateColor = (
+			value: number,
+			natureCultureCode: string,
+			scaleMax: number,
+		) => {
 			const scaleMin = 0;
 			const pivot = scaleMax / 2;
-			
+			const colors = getColorsForNatureCulture(natureCultureCode);
 			const scale = d3
 				.scaleLinear<string>()
 				.domain([scaleMin, pivot, scaleMax])
-				.range(["#FFFFFF", "#FFEF74", "#D1C060", "#A5934D", "#816E3D", "#56422A"]);
+				.range(colors);
 
 			return scale(value);
 		};
 
-		const updateMap = (value: string) => {
+		const updateMap = (natureCultureCode: string) => {
 			if (!map.value) return;
 
 			const resultArray = [];
 			resultArray.push("match");
 			resultArray.push(["get", "code"]);
-			const entries = Object.entries(fullPeriodData[value as keyof typeof fullPeriodData]);
-			const maxValue = Math.max(...entries.map(([_, value]) => Number(value)));
-			console.log(maxValue);
-			entries.forEach(
-				([key, value]) => {
-					resultArray.push(key, calculateColor(Number(value), maxValue));
-				},
+			const entries = Object.entries(
+				fullPeriodData[natureCultureCode as keyof typeof fullPeriodData],
 			);
+			const maxValue = Math.max(...entries.map(([_, value]) => Number(value)));
+			entries.forEach(([key, value]) => {
+				resultArray.push(
+					key,
+					calculateColor(Number(value), natureCultureCode, maxValue),
+				);
+			});
 			resultArray.push("#CCCCCC");
 			map.value.setPaintProperty(
 				"departements_fill",
