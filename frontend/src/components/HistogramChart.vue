@@ -19,6 +19,7 @@ Chart.register(
   Tooltip,
   Legend
 );
+import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "HistogramChart",
