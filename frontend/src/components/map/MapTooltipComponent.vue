@@ -32,12 +32,12 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const tooltipData = ref<Record<string, any>>({});
+		const tooltipData = ref<Record<string, string>>({});
 
 		const loadTooltipData = async () => {
 			if (props.tooltip.mode === "parcelle") {
-				// Use the imported JSON data
-				tooltipData.value = parcellesData;
+				// Find the entry in parcellesData that matches the tooltip.value
+				tooltipData.value = parcellesData[props.tooltip.value] || null;
 			}
 		};
 
