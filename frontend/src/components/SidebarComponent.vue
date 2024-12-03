@@ -9,60 +9,69 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, watch } from "vue";
+import { useAppStore } from "@/store/appStore.ts";
+import { defineComponent, onMounted, ref, watch } from "vue";
 import TileOne from "./sidebar/TileOne.vue";
 import TileTwo from "./sidebar/TileTwo.vue";
-import { useAppStore } from '@/store/appStore.ts';
 
 export default defineComponent({
-  name: "SidebarComponent",
-  components: {
-    TileOne,
-    TileTwo,
-  },
-  setup() {
-    const appStore = useAppStore();
+	name: "SidebarComponent",
+	components: {
+		TileOne,
+		TileTwo,
+	},
+	setup() {
+		const appStore = useAppStore();
 
-    const loading = ref(true);
-    const selectedNatureCulture = ref("P");
+		const loading = ref(true);
+		const selectedNatureCulture = ref("P");
 
-    const updateSelectedNatureCulture = (value: string) => {
-      selectedNatureCulture.value = value;
-      appStore.updateOption(value);
-    };
+		const updateSelectedNatureCulture = (value: string) => {
+			selectedNatureCulture.value = value;
+			appStore.updateOption(value);
+		};
 
-    onMounted(() => {
-      setTimeout(() => {
-        loading.value = false;
-      }, 1000);
-    });
-
-    const toto = ref(1)
-    const tutu = ref([1,1])
-    const tata = ref({})
-
-		watch(() => appStore.mapZoom, (newValue: number) => {
-			toto.value = newValue;
+		onMounted(() => {
+			setTimeout(() => {
+				loading.value = false;
+			}, 1000);
 		});
 
-    watch(() => appStore.address, (newValue: Array<number>) => {
-      tutu.value = newValue;
-    });
+		const toto = ref(1);
+		const tutu = ref([1, 1]);
+		const tata = ref({});
 
-    watch(() => appStore.comData, (newValue: Object) => {
-      tata.value = newValue;
-    });
+		watch(
+			() => appStore.mapZoom,
+			(newValue: number) => {
+				toto.value = newValue;
+			},
+		);
 
-    return {
-      loading,
-      selectedNatureCulture,
-      updateSelectedNatureCulture,
-      appStore,
-      toto,
-      tutu,
-      tata,
-    };
-  },
+		watch(
+			() => appStore.address,
+			(newValue: Array<number>) => {
+				tutu.value = newValue;
+			},
+		);
+
+		watch(
+			() => appStore.comData,
+			(newValue: Object) => {
+				tata.value = newValue;
+			},
+		);
+
+		return {
+			loading,
+			selectedNatureCulture,
+			updateSelectedNatureCulture,
+			appStore,
+			toto,
+			tutu,
+			tata,
+		};
+	},
 });
 </script>
 

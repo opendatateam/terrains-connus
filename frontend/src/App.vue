@@ -9,32 +9,32 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import HeaderComponent from "./components/HeaderComponent.vue";
 import MainComponent from "./components/MainComponent.vue";
 import MobileMessage from "./components/MobileMessage.vue"; // Assurez-vous que ce fichier existe
 
 export default defineComponent({
-  name: "App",
-  components: {
-    HeaderComponent,
-    MainComponent,
-    MobileMessage,
-  },
-  setup() {
-    const isMobile = ref(false);
+	name: "App",
+	components: {
+		HeaderComponent,
+		MainComponent,
+		MobileMessage,
+	},
+	setup() {
+		const isMobile = ref(false);
 
-    // Détecter si l'utilisateur est sur un appareil mobile
-    onMounted(() => {
-      const userAgent = window.navigator.userAgent.toLowerCase();
-      isMobile.value =
-        /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/.test(
-          userAgent
-        );
-    });
+		// Détecter si l'utilisateur est sur un appareil mobile
+		onMounted(() => {
+			const userAgent = window.navigator.userAgent.toLowerCase();
+			isMobile.value =
+				/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/.test(
+					userAgent,
+				);
+		});
 
-    return { isMobile };
-  },
+		return { isMobile };
+	},
 });
 </script>
 

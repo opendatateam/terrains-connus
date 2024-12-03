@@ -38,7 +38,6 @@ export default defineComponent({
 		let displayDepLayer = true;
 		const tooltipTitle = ref(""); // Initialize as an empty string
 
-
 		const tooltip = ref({
 			top: "0px",
 			left: "0px",
@@ -131,7 +130,7 @@ export default defineComponent({
 						"fill-color": "rgba(0, 0, 255, 0.2)",
 					},
 				});
-				
+
 				mapInstance.on("mousemove", "departements_fill", (e: any) => {
 					tooltipTitle.value = e.features[0]["properties"]["nom"];
 					const depCode = e.features[0]["properties"]["code"];
@@ -185,17 +184,19 @@ export default defineComponent({
 
 		watch(
 			() => appStore.codeInsee,
-			(newValue: string) => {	
+			(newValue: string) => {
 				fetch(
-					"https://object.data.gouv.fr/dataeng-open/dev/parcelles/" + appStore.codeInsee + ".json"
+					"https://object.data.gouv.fr/dataeng-open/dev/parcelles/" +
+						appStore.codeInsee +
+						".json",
 				)
 					.then((response) => {
 						return response.json();
 					})
 					.then((data) => {
-						appStore.updateComData(data)
+						appStore.updateComData(data);
 					});
-				},
+			},
 		);
 
 		watch(

@@ -86,7 +86,7 @@ import tableGreyIcon from "@/assets/tablegrey.svg";
 interface AddressFeature {
 	banId: string;
 	label: string;
-  citycode: string;
+	citycode: string;
 }
 
 interface Geometry {
@@ -142,7 +142,7 @@ export default defineComponent({
 
 		const goToAddress = (coordinates: Array<number>, code: string) => {
 			appStore.updateAddress(coordinates);
-      appStore.updateCodeInsee(code);
+			appStore.updateCodeInsee(code);
 			resultsAdresses.value = null;
 		};
 
