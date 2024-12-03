@@ -135,7 +135,7 @@ export default defineComponent({
 					tooltipTitle.value = e.features[0]["properties"]["nom"];
 					const depCode = e.features[0]["properties"]["code"];
 					appStore.updateMouseDep(depCode);
-					appStore.updateMouseDepName(depName.value);
+					appStore.updateMouseDepName(tooltipTitle.value);
 					tooltip.value.mode = "departement";
 					tooltip.value.value = (
 						fullPeriodData[
