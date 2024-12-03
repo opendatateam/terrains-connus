@@ -97,7 +97,7 @@ interface Feature {
 	geometry: Geometry;
 }
 
-interface ResultsAdresses {
+export interface ResultsAdresses {
 	features: Feature[];
 }
 

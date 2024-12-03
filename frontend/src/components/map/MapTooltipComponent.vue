@@ -20,7 +20,7 @@ import parcellesData from "@/assets/json/parcelles.json";
 import { type PropType, defineComponent, onMounted, ref } from "vue";
 
 // Define the type for the parcellesData
-interface ParcelleData {
+export interface ParcelleData {
 	date_mutation: string;
 	nature_mutation: string;
 	valeur_fonciere: string;
@@ -28,7 +28,6 @@ interface ParcelleData {
 	id_parcelle: string;
 	nature_culture: string;
 	nature_culture_speciale: null;
-	// Add other fields as necessary
 	MOY_REND_FR_2019_2023: null;
 }
 
