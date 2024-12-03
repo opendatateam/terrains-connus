@@ -19,28 +19,31 @@ import { defineComponent } from "vue";
 import { NatureCulture } from "../../types";
 
 export default defineComponent({
-  name: "TileOne",
-  props: {
-    selectedNatureCulture: {
-      type: String,
-      default: "P",
-    },
-  },
-  data() {
-    return {
-      localSelectedNatureCulture: this.selectedNatureCulture,
-      natureCultureOptions: NatureCulture,
-    };
-  },
-  methods: {
-    emitSelection() {
-      this.$emit('update:selectedNatureCulture', this.localSelectedNatureCulture);
-    },
-  },
-  watch: {
-    selectedNatureCulture(newVal) {
-      this.localSelectedNatureCulture = newVal;
-    },
-  },
+	name: "TileOne",
+	props: {
+		selectedNatureCulture: {
+			type: String,
+			default: "P",
+		},
+	},
+	data() {
+		return {
+			localSelectedNatureCulture: this.selectedNatureCulture,
+			natureCultureOptions: NatureCulture,
+		};
+	},
+	methods: {
+		emitSelection() {
+			this.$emit(
+				"update:selectedNatureCulture",
+				this.localSelectedNatureCulture,
+			);
+		},
+	},
+	watch: {
+		selectedNatureCulture(newVal) {
+			this.localSelectedNatureCulture = newVal;
+		},
+	},
 });
 </script>
