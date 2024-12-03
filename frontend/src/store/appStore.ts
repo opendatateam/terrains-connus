@@ -5,6 +5,8 @@ export const useAppStore = defineStore('appStore', {
     option: 'P',
     mapZoom: 5.2,
     address: [1,1],
+    mouseDep: "",
+    mouseDepName: "",
   }),
   actions: {
     updateOption(newOption: string) {
@@ -15,6 +17,12 @@ export const useAppStore = defineStore('appStore', {
     },
     updateAddress(address: any){
         this.address = address
+    },
+    updateMouseDep(dep: string){
+        this.mouseDep = dep;
+    },
+    updateMouseDepName(depName: string){
+        this.mouseDepName = depName;
     },
   },
 });

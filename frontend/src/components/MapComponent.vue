@@ -122,10 +122,12 @@ export default defineComponent({
 						"fill-color": "rgba(0, 0, 255, 0.2)",
 					},
 				});
-
+				
 				mapInstance.on("mousemove", "departements_fill", (e: any) => {
 					depName.value = e.features[0]["properties"]["nom"];
 					const depCode = e.features[0]["properties"]["code"];
+					appStore.updateMouseDep(depCode);
+					appStore.updateMouseDepName(depName.value);
 					tooltip.value.mode = "departement";
 					tooltip.value.value = (
 						fullPeriodData[
