@@ -91,7 +91,7 @@ export default defineComponent({
 			const tooltipX = e.point.x;
 			const tooltipY = e.point.y;
 			tooltip.value.top = `${tooltipY}px`;
-			tooltip.value.left = `${tooltipY}px`;
+			tooltip.value.left = `${tooltipX}px`;
 			if (tooltip.value.mode === "parcelle") {
 				// No need to set tooltipData here anymore
 			}
