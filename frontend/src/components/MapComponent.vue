@@ -1,20 +1,19 @@
 <template>
-	<div>
-		<div
-			ref="mapTooltip"
-			class="map_tooltip"
-			v-show="tooltip.visibility == 'visible'"
-			:style="{ top: tooltip.top, left: tooltip.left }"
-		>
-			<MapTooltipComponent
-				:tooltip="tooltip"
-				:tooltipTitle="tooltipTitle"
-				:tooltipData="tooltipData"
-			/>
-		</div>
-		<div id="map" style="width: 100%; height: 100vh;"></div>
-		<div id="sidebar" class="floating-sidebar"></div>
+  <div>
+	<div
+		ref="mapTooltip"
+		class="map_tooltip"
+		v-show="tooltip.visibility == 'visible'"
+		:style="{ top: tooltip.top, left: tooltip.left }"
+	>
+	  <MapTooltipComponent
+		:tooltip="tooltip"
+		:tooltipTitle="tooltipTitle"
+	  />
 	</div>
+	<div id="map" style="width: 100%; height: 100vh;"></div>
+	<div id="sidebar" class="floating-sidebar"></div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -38,7 +37,6 @@ export default defineComponent({
 		const map: Ref<MapLibreMap | null> = ref(null);
 		let displayDepLayer = true;
 		const tooltipTitle = ref(""); // Initialize as an empty string
-		const tooltipData = ref({});
 
 		const tooltip = ref({
 			top: "0px",
@@ -95,13 +93,7 @@ export default defineComponent({
 			tooltip.value.top = `${tooltipY}px`;
 			tooltip.value.left = `${tooltipY}px`;
 			if (tooltip.value.mode === "parcelle") {
-				// Fetch or set additional data for parcelle
-				tooltipData.value = {
-					// Example data
-					owner: "John Doe",
-					area: "500 sqm",
-					// Add more fields as needed
-				};
+				// No need to set tooltipData here anymore
 			}
 		};
 
@@ -213,55 +205,53 @@ export default defineComponent({
 			},
 		);
 
-		return { map, tooltip, tooltipTitle, tooltipData };
+		return { map, tooltip, tooltipTitle };
 	},
 });
 </script>
 
 <style scoped>
 #map {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
 }
 
 .floating-sidebar {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 250px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 15px;
-  z-index: 1;
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	width: 250px;
+	background-color: white;
+	border-radius: 10px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	padding: 15px;
+	z-index: 1;
 }
 
 .map_tooltip {
-  width: auto;
-  min-width: 165px;
-  height: auto;
-  background-color: white;
-  position: absolute;
-  z-index: 999;
-  border-radius: 4px;
-  box-shadow: 0 8px 16px 0 rgba(22, 22, 22, 0.12),
-    0 8px 16px -16px rgba(22, 22, 22, 0.32);
-  text-align: left;
-  pointer-events: none;
-  font-size: 0.75rem;
+	width: auto;
+	min-width: 165px;
+	height: auto;
+	background-color: white;
+	position: absolute;
+	z-index: 999;
+	border-radius: 4px;
+	box-shadow: 0 8px 16px 0 rgba(22, 22, 22, 0.12),
+		0 8px 16px -16px rgba(22, 22, 22, 0.32);
+	text-align: left;
+	pointer-events: none;
+	font-size: 0.75rem;
 }
 
 .tooltip_body {
-    padding-left: 0.75rem;
-    padding-top: 0.25rem;
-    padding-right: 0.75rem;
-    line-height: 1.67;
+	padding-left: 0.75rem;
+	padding-top: 0.25rem;
+	padding-right: 0.75rem;
+	line-height: 1.67;
 }
-
-
-</style> 
+</style>
