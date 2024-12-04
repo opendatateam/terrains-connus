@@ -27,8 +27,8 @@
 <script lang="ts">
 // Import the JSON file
 import parcellesData from "@/assets/json/parcelles.json";
-import { type PropType, defineComponent, onMounted, ref, watch } from "vue";
 import { useAppStore } from "@/store/appStore.ts";
+import { type PropType, defineComponent, onMounted, ref, watch } from "vue";
 
 // Define the type for the parcellesData
 export interface ParcelleData {
@@ -55,12 +55,12 @@ export default defineComponent({
 			type: String,
 			required: true,
 			default: "",
-		}
+		},
 	},
 
 	setup(props) {
 		const appStore = useAppStore();
-		const comData = ref({})
+		const comData = ref({});
 		const tooltipData = ref<ParcelleData | null>(null);
 
 		const loadTooltipData = () => {
@@ -75,9 +75,12 @@ export default defineComponent({
 			loadTooltipData();
 		});
 
-		watch(() => appStore.comData, (newValue: Object) => {
-			comData.value = newValue;
-		});
+		watch(
+			() => appStore.comData,
+			(newValue: Object) => {
+				comData.value = newValue;
+			},
+		);
 		return { tooltipData, comData };
 	},
 });
