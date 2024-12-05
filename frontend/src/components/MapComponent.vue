@@ -25,7 +25,11 @@ import { getColorsForNatureCulture } from "@/types/NatureCulture";
 import * as d3 from "d3-scale";
 import maplibregl, { type Map as MapLibreMap } from "maplibre-gl";
 import type { LngLatLike, StyleSpecification } from "maplibre-gl";
+import { Protocol } from "pmtiles";
 import { type Ref, defineComponent, onMounted, ref, watch } from "vue";
+
+let protocol = new Protocol();
+maplibregl.addProtocol("pmtiles",protocol.tile);
 
 export default defineComponent({
 	name: "MapComponent",
@@ -122,7 +126,7 @@ export default defineComponent({
 					id: "parcelles_fill",
 					type: "fill",
 					source: "cadastre",
-					filter: ["has", "dvf"],
+					filter: ["has", "dvf_agri"],
 					"source-layer": "parcelles",
 					minzoom: 13,
 					maxzoom: 18,

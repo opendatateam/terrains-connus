@@ -33,7 +33,7 @@
       },
       "cadastre": {
           "type": "vector",
-          "url": "https://openmaptiles.geo.data.gouv.fr/data/cadastre-dvf.json"
+          "url": "pmtiles://https://files.data.gouv.fr/pmtiles/cadastre-dvf-agri.pmtiles"
       }
     },
     "sprite": "https://openmaptiles.github.io/osm-bright-gl-style/sprite",
