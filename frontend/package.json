@@ -21,6 +21,7 @@
 		"lucide-vue-next": "^0.462.0",
 		"maplibre-gl": "^4.7.1",
 		"pinia": "^2.2.8",
+		"pmtiles": "^4.0.1",
 		"radix-vue": "^1.9.10",
 		"tailwind-merge": "^2.5.5",
 		"tailwindcss-animate": "^1.0.7",
